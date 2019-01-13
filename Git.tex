@@ -1,0 +1,74 @@
+\documentclass[12pt]{article}
+
+
+\usepackage{amssymb,amsmath,amsthm}
+
+\usepackage{wrapfig,tikz, tikz-cd}
+\usetikzlibrary{arrows, arrows, calc, decorations.markings, automata,calc}
+
+\newcommand{\dd}{\partial}
+\newcommand{\argmax}{\operatorname{argmax}}
+\newcommand{\cut}{\operatorname{cut}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\KK}{\mathbb{K}}
+\newcommand{\rr}{\text{r}}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ph}{\varphi}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\BB}{\mathfrak{B}}
+\newcommand{\MM}{\mathfrak{M}}
+\newcommand{\kk}{\textbf{k}}
+\usepackage{tcolorbox}
+
+\definecolor{tangoBlack1}{RGB}{0,0,0}
+\definecolor{tangoGrey1}{RGB}{210,210,210}
+
+\makeatletter
+\newtcbox{\keywordmin}{
+  on line,
+  fontupper=\sffamily,
+  boxrule=1pt,
+  arc=1pt,
+  coltext=tangoBlack1,
+  colback=tangoGrey1,
+  colframe=tangoGrey1,
+  boxsep=0pt,
+  left=2pt,right=2pt,top=2pt,bottom=2pt
+}
+\makeatother
+
+\begin{document}
+
+
+
+
+
+\title{Git cheet sheet}
+\author{Efim Abrikosov}
+\maketitle
+
+
+\section{Main commands}
+\begin{itemize}
+  \item \keywordmin{git help \emph{functionname}} --- display help information about Git
+  \item \keywordmin{git init \emph{[-{}-template=templatedirectory]}} --- create an empty Git repository or reinitialize an existing one. Files and directories in the template directory whose name do not start with a dot will be copied to the directory after it is created.
+  \item \keywordmin{git clone  \emph{repository [directory]}} --- clone a repository into a new directory. Optionally supply the name of a new directory to clone into.
+  \item \keywordmin{git add \emph{[filename]}} --- add file contents to the index
+  \item \keywordmin{git commit  \emph{[-a][-m text]}} --- record changes to the repository
+  \item \keywordmin{git diff  \emph{[cached]}}
+  \item \keywordmin{git status }
+\end{itemize}
+
+
+
+
+\section{Base workflow cases}
+
+
+\section{Useful links}
+
+
+\end{document}
