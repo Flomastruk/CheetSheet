@@ -1,0 +1,51 @@
+\documentclass[12pt]{article}
+
+
+\usepackage{amssymb,amsmath,amsthm}
+
+\usepackage{wrapfig,tikz, tikz-cd}
+\usetikzlibrary{arrows, arrows, calc, decorations.markings, automata,calc}
+
+\newcommand{\dd}{\partial}
+\newcommand{\argmax}{\operatorname{argmax}}
+\newcommand{\cut}{\operatorname{cut}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\KK}{\mathbb{K}}
+\newcommand{\rr}{\text{r}}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ph}{\varphi}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\BB}{\mathfrak{B}}
+\newcommand{\MM}{\mathfrak{M}}
+\newcommand{\kk}{\textbf{k}}
+
+\begin{document}
+
+Sample variance
+\begin{equation}
+S_X^2 = \frac 1{n-1}\sum_1^n(X_i - \bar X)^2
+\end{equation}
+
+Sample correlation coefficient
+\begin{equation}
+r_{X,Y} = \frac{\sum_{i = 1}^{n}(X_i-\bar{X})(Y_i-\bar{Y})}{(n-1)\sqrt{(S_X^2S_Y^2)}}
+\end{equation}
+
+
+QQ-plot for cumulative distribution function $F$ is the set of points $\left(q_F\left(\frac i {n+1}\right), x_{(i)}\right)$, where $q_F(\cdot)$ is the quantile function for the distribution.
+
+Estimators
+
+Mean Squared Error (MSE)
+\begin{equation}
+	MSE(\theta; T(X), g(\theta)) = \textbf{E}_\theta\left(T(X) - g(\theta)\right)^2
+\end{equation}
+
+$MSE(\theta; T(X)) = \text{var}_\theta T + \left(\textbf{E}_\theta T(X) - g(\theta)\right)^2$
+
+
+
+\end{document}
