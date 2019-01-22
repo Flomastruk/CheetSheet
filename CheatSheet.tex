@@ -1,10 +1,15 @@
 \documentclass[12pt]{article}
-
-
 \usepackage{amssymb,amsmath,amsthm}
 
-\usepackage{wrapfig,tikz, tikz-cd}
+\usepackage{wrapfig, tikz, tikz-cd}
 \usetikzlibrary{arrows, arrows, calc, decorations.markings, automata,calc}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false,linkbordercolor=red,linkcolor=green,pdfborderstyle={/S/U/W 2}}
+
+\usepackage{url}
+
 
 \newcommand{\dd}{\partial}
 \newcommand{\argmax}{\operatorname{argmax}}
@@ -24,27 +29,125 @@
 
 \begin{document}
 
+\section{General definitions}
+
+\subsection{Basic}
+
+\begin{itemize}
+\item
 Sample variance
 \begin{equation}
 S_X^2 = \frac 1{n-1}\sum_1^n(X_i - \bar X)^2
 \end{equation}
 
+\item
 Sample correlation coefficient
 \begin{equation}
 r_{X,Y} = \frac{\sum_{i = 1}^{n}(X_i-\bar{X})(Y_i-\bar{Y})}{(n-1)\sqrt{(S_X^2S_Y^2)}}
 \end{equation}
 
-
+\item
 QQ-plot for cumulative distribution function $F$ is the set of points $\left(q_F\left(\frac i {n+1}\right), x_{(i)}\right)$, where $q_F(\cdot)$ is the quantile function for the distribution.
 
-Estimators
-
-Mean Squared Error (MSE)
+\item Mean Squared Error (MSE)
 \begin{equation}
-	MSE(\theta; T(X), g(\theta)) = \textbf{E}_\theta\left(T(X) - g(\theta)\right)^2
+	\text{MSE}(\theta; T(X), g(\theta)) = \textbf{E}_\theta\left(T(X) - g(\theta)\right)^2
 \end{equation}
 
-$MSE(\theta; T(X)) = \text{var}_\theta T + \left(\textbf{E}_\theta T(X) - g(\theta)\right)^2$
+\item
+Bias-variance decomposition
+\begin{equation}
+\text{MSE}(\theta; T(X)) = \text{var}_\theta T + \left(\textbf{E}_\theta T(X) - g(\theta)\right)^2
+\end{equation}
+
+\end{itemize}
+
+\subsection {$k$-th order statistic $X_{(k)}$}
+$X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from continuous distribution $F$.
+\begin{equation}\label{kth_order_pdf}
+	f_{(k)}(x) = \frac{n!}{(k-1)!(n-k)!}F(x)^{k-1}(1-F(x))^{n-k}f(x)
+\end{equation}
+\begin{equation}\label{kth_order_cdf}
+	F_{(k)}(x) = \sum_{j = k}^n {{n}\choose{j}}F(x)^j (1-F(x))^{n-j}
+\end{equation}
+
+\begin{equation}\label{kth_order_expectation}
+	\textbf{E}F(X_{(k)}) = \frac k{n+1}
+\end{equation}
+
+
+\section{Important distributions}
+\begin{itemize}
+	\item Geometric distribution $G(\theta),\ 0\leq\theta\leq 1$
+	\begin{itemize}
+		\item pdf
+		\begin{equation}\label{geometric_pdf}
+			f_\theta(k) = (1-\theta)^{1-k}\theta
+		\end{equation}
+		\item cdf
+		\begin{equation}\label{geometric_cdf}
+			F_\theta(k) = 1-(1-\theta)^k
+		\end{equation}
+	\end{itemize}
+	\item Gamma distribution $\Gamma(\alpha, \lambda),\ \alpha >0, \lambda > 0$
+	\begin{itemize}
+		\item $\alpha$ and $\lambda$ are known as ``shape'' and ``inverse scale'' parameters.
+		\item pdf
+			\begin{equation}\label{gamma_pdf}
+				p_{\alpha, \lambda} (x)= \frac{x^{\alpha - 1} \lambda^{\alpha}e^{-\lambda x}}{\Gamma(\alpha)}
+			\end{equation}
+		\item cdf (where $\gamma(s, x) = \int_0^x t^{s-1}e^{-t}dt$ --- is the ``incomplete gamma function'')
+			\begin{equation}
+				F_{\alpha,\lambda}(x) = \frac{\gamma(\alpha, x\beta)}{\Gamma(\alpha)}
+			\end{equation}
+
+
+	\end{itemize}
+\end{itemize}
+
+
+\section{Estimators}
+
+\subsection{Maximum of $n$ uniformally distributed statistics}
+
+Set up: $X_1, X_2,\ldots X_n$ i.i.d. drown from $U[0, \theta]$, where $\theta$ is the parameter of interest.
+
+\begin{itemize}
+	\item $\hat\theta = 2\bar{X_n}$
+	\begin{itemize}
+		\item method of moments estimator
+		\item \emph{unbiased}
+		\item $\text{MSE}(\theta, \hat\theta) = \frac {\theta^2}{3n}$, see (\ref{kth_order_pdf})
+	\end{itemize}
+	\item $\frac {n+1} n X_{(n)}$ --- $n$-th order statistic, i.e. maximum.
+	\begin{itemize}
+		\item $\textbf{E}_\theta X_{(n)} = \frac{n+1}{n+2}\theta$, see (\ref{kth_order_pdf})
+		\item $\text{MSE}(\theta, X_{(n)}) = \frac {2\theta^2}{(n+2)(n+1)}$
+	\end{itemize}
+	\item $\frac{n+2}{n+1}X_{(n)}$
+	\begin{itemize}
+		\item \emph{unbiased}
+		\item $\text{MSE}(\theta, \frac{n+2}{n+1}X_{(n)}) = \frac {2\theta^2}{(n+1)^2}$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Univariate normal distribution}
+
+\begin{itemize}
+	\item $\displaystyle{(\hat\mu, \hat{\sigma^2}) = \left(\bar{X_n}, \frac 1 n \sum_{i=1}^n (X_i - \bar{X_n}) \right) = \left(\bar{X_n}, \frac {n-1} n S_X^2 \right)}$
+	\begin{itemize}
+		\item maximum likelihood estimator
+		\item method of moments estimator
+		\item $\hat\mu$ is unbiased
+		\item $\textbf{E}_{(\mu,\sigma^2)}\hat{\sigma^2} = \frac {n-1} n \sigma^2$
+
+	\end{itemize}
+
+\end{itemize}
+
+
+
+
 
 
 
