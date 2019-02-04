@@ -26,6 +26,8 @@
 \newcommand{\BB}{\mathfrak{B}}
 \newcommand{\MM}{\mathfrak{M}}
 \newcommand{\kk}{\textbf{k}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\II}{\mathbb{I}}
 
 \begin{document}
 
@@ -37,7 +39,7 @@
 \item
 Sample variance
 \begin{equation}
-S_X^2 = \frac 1{n-1}\sum_1^n(X_i - \bar X)^2
+S_X^2 = \frac 1{n-1}\sum_{i = 1}^n(X_i - \bar X)^2
 \end{equation}
 
 \item
@@ -51,13 +53,19 @@ QQ-plot for cumulative distribution function $F$ is the set of points $\left(q_F
 
 \item Mean Squared Error (MSE)
 \begin{equation}
-	\text{MSE}(\theta; T(X), g(\theta)) = \textbf{E}_\theta\left(T(X) - g(\theta)\right)^2
+	\text{MSE}(\theta; T(X), g(\theta)) = \mathbb{E}_\theta\left(T(X) - g(\theta)\right)^2
 \end{equation}
 
 \item
 Bias-variance decomposition
 \begin{equation}
-\text{MSE}(\theta; T(X)) = \text{var}_\theta T + \left(\textbf{E}_\theta T(X) - g(\theta)\right)^2
+\text{MSE}(\theta; T(X)) = \text{var}_\theta T + \left(\mathbb{E}_\theta T(X) - g(\theta)\right)^2
+\end{equation}
+
+\item\label{ecdf}
+Empirical distribution function
+\begin{equation}
+	\hat{F}(x) = \sum_{i = 1}^n \II(X_i \leq x)
 \end{equation}
 
 \end{itemize}
@@ -72,12 +80,24 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 \end{equation}
 
 \begin{equation}\label{kth_order_expectation}
-	\textbf{E}F(X_{(k)}) = \frac k{n+1}
+	\mathbb{E}F(X_{(k)}) = \frac k{n+1}
 \end{equation}
+
+
 
 
 \section{Important distributions}
 \begin{itemize}
+	\item Poisson distribution Poisson$(\lambda),\ \lambda > 0$
+	\begin{itemize}
+		\item $\lambda$ is the average number of events per interval
+		\item pdf
+		\begin{equation}\label{poisson_pdf}
+			p_\lambda(k) = e^{-\lambda}\frac {\lambda^k}{k!}
+		\end{equation}
+	\end{itemize}
+
+
 	\item Geometric distribution $G(\theta),\ 0\leq\theta\leq 1$
 	\begin{itemize}
 		\item pdf
@@ -89,12 +109,49 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 			F_\theta(k) = 1-(1-\theta)^k
 		\end{equation}
 	\end{itemize}
+
+	\item Exponential distribution $F(x;\lambda)$
+	\begin{itemize}
+		\item pdf
+		\begin{equation}\label{exponential_pdf}
+			f_\lambda(x) = \lambda e^{-\lambda x}
+		\end{equation}
+		\item cdf
+		\begin{equation}\label{exponential_cdf}
+			F_\lambda(x) = 1 - e^{-\lambda x}
+		\end{equation}
+		\item $\EE_\lambda X = 1/\lambda$
+
+	\end{itemize}
+
+	\item Beta distribution $B(\alpha, \beta),\ \alpha, \beta > 0$
+	\begin{itemize}
+		\item pdf
+		\begin{equation}\label{beta_pdf}
+			f_{\alpha, \beta}(x) = \frac{x^{\alpha-1} (1-x)^{\beta-1}}{B(\alpha, \beta)},\ B(\alpha, \beta) \equiv \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}
+		\end{equation}
+
+	\end{itemize}
+
+	\item Weibull distribution
+	\begin{itemize}
+		\item $\alpha$ and $\lambda$ are the ``shape'' and `inverse scale'' parameters.
+		\item pdf
+		\begin{equation}\label{weibull_pdf}
+			f_{\lambda, \alpha}(x) = \lambda^{\alpha}\alpha x^{\alpha-1} e^{-(\lambda x)^{\alpha}}
+		\end{equation}
+		\item cdf
+		\begin{equation}\label{weibull_cdf}
+			F_{\lambda, \alpha}(x) = 1 - e^{-(\lambda x)^\alpha}
+		\end{equation}
+	\end{itemize}
+
 	\item Gamma distribution $\Gamma(\alpha, \lambda),\ \alpha >0, \lambda > 0$
 	\begin{itemize}
 		\item $\alpha$ and $\lambda$ are known as ``shape'' and ``inverse scale'' parameters.
 		\item pdf
 			\begin{equation}\label{gamma_pdf}
-				p_{\alpha, \lambda} (x)= \frac{x^{\alpha - 1} \lambda^{\alpha}e^{-\lambda x}}{\Gamma(\alpha)}
+				f_{\alpha, \lambda} (x)= \frac{x^{\alpha - 1} \lambda^{\alpha}e^{-\lambda x}}{\Gamma(\alpha)}
 			\end{equation}
 		\item cdf (where $\gamma(s, x) = \int_0^x t^{s-1}e^{-t}dt$ --- is the ``incomplete gamma function'')
 			\begin{equation}
@@ -119,15 +176,15 @@ Set up: $X_1, X_2,\ldots X_n$ i.i.d. drown from $U[0, \theta]$, where $\theta$ i
 		\item \emph{unbiased}
 		\item $\text{MSE}(\theta, \hat\theta) = \frac {\theta^2}{3n}$, see (\ref{kth_order_pdf})
 	\end{itemize}
-	\item $\frac {n+1} n X_{(n)}$ --- $n$-th order statistic, i.e. maximum.
+	\item $X_{(n)}$ --- $n$-th order statistic, i.e. maximum.
 	\begin{itemize}
-		\item $\textbf{E}_\theta X_{(n)} = \frac{n+1}{n+2}\theta$, see (\ref{kth_order_pdf})
+		\item $\mathbb{E}_\theta X_{(n)} = \frac{n}{n+1}\theta$, see (\ref{kth_order_pdf})
 		\item $\text{MSE}(\theta, X_{(n)}) = \frac {2\theta^2}{(n+2)(n+1)}$
 	\end{itemize}
 	\item $\frac{n+2}{n+1}X_{(n)}$
 	\begin{itemize}
-		\item \emph{unbiased}
-		\item $\text{MSE}(\theta, \frac{n+2}{n+1}X_{(n)}) = \frac {2\theta^2}{(n+1)^2}$
+		\item best estimator of the form $cX_{(n)}$
+		\item $\text{MSE}(\theta, \frac{n+2}{n+1}X_{(n)}) = \frac {\theta^2}{(n+1)^2}$
 	\end{itemize}
 \end{itemize}
 
@@ -138,11 +195,21 @@ Set up: $X_1, X_2,\ldots X_n$ i.i.d. drown from $U[0, \theta]$, where $\theta$ i
 	\begin{itemize}
 		\item maximum likelihood estimator
 		\item method of moments estimator
-		\item $\hat\mu$ is unbiased
-		\item $\textbf{E}_{(\mu,\sigma^2)}\hat{\sigma^2} = \frac {n-1} n \sigma^2$
+		\item $\hat\mu$ is \emph{unbiased}
+		\item $\mathbb{E}_{(\mu,\sigma^2)}\hat{\sigma^2} = \frac {n-1} n \sigma^2$
 
 	\end{itemize}
 
+\end{itemize}
+
+\subsection{Empirical distribution function}
+Let $X_1, \ldots X_n$ be an i.i.d. sample drawn from the distribution $F$.
+\begin{itemize}
+	\item The empirical distribution function (ecdf) $\hat{F}(x) = \sum_{i = 1}^n \II(X_i \leq x)$ (see \ref{ecdf})
+	\begin{itemize}
+		\item \emph{unbiased}
+		\item $\textbf{cov}_F\left(\hat F (u), \hat F (v)\right) = n^{-1}(F(\min(u, v)) - F(u)F(v))$ -- positively correlated
+	\end{itemize}
 \end{itemize}
 
 
