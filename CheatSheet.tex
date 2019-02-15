@@ -10,6 +10,19 @@
 
 \usepackage{url}
 
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
 
 \newcommand{\dd}{\partial}
 \newcommand{\argmax}{\operatorname{argmax}}
@@ -38,7 +51,7 @@
 \begin{itemize}
 \item
 Sample variance
-\begin{equation}
+\begin{equation}\label{sample_variance}
 S_X^2 = \frac 1{n-1}\sum_{i = 1}^n(X_i - \bar X)^2
 \end{equation}
 
@@ -162,6 +175,18 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 	\end{itemize}
 \end{itemize}
 
+\section{Fundamental results}
+\begin{theorem}
+	Let $X_1,\ldots X_n$ be an i.i.d. ramdom variables from the $N(\mu, \sigma^2)$ distribution, then
+	\begin{enumerate}
+		\item $\bar X$ is $N(\mu, \sigma^2/n)$ distributed;
+		\item $(n-1)S_X^2/\sigma^2$ is $\chi^2_{n-1}$-distributed (see \ref{sample_variance});
+		\item $\bar X$ and $S^2_{X}$ are independent;
+		\item $\sqrt{n}(\bar{X} - \mu)/\sqrt{S_X^2}$ has the $t_{n-1}$- distribution.
+	\end{enumerate}
+\end{theorem}
+\proof $\left\|X\right\|^2 - n \bar{X}^2 = (n-1)S_X^2$
+
 
 \section{Estimators}
 
@@ -191,12 +216,12 @@ Set up: $X_1, X_2,\ldots X_n$ i.i.d. drown from $U[0, \theta]$, where $\theta$ i
 \subsection{Univariate normal distribution}
 
 \begin{itemize}
-	\item $\displaystyle{(\hat\mu, \hat{\sigma^2}) = \left(\bar{X_n}, \frac 1 n \sum_{i=1}^n (X_i - \bar{X_n}) \right) = \left(\bar{X_n}, \frac {n-1} n S_X^2 \right)}$
+	\item $\displaystyle{(\hat\mu, \hat{\sigma}^2) = \left(\bar{X_n}, \frac 1 n \sum_{i=1}^n (X_i - \bar{X_n}) \right) = \left(\bar{X_n}, \frac {n-1} n S_X^2 \right)}$
 	\begin{itemize}
 		\item maximum likelihood estimator
 		\item method of moments estimator
 		\item $\hat\mu$ is \emph{unbiased}
-		\item $\mathbb{E}_{(\mu,\sigma^2)}\hat{\sigma^2} = \frac {n-1} n \sigma^2$
+		\item $\mathbb{E}_{(\mu,\sigma^2)}\hat{\sigma}^2 = \frac {n-1} n \sigma^2$
 
 	\end{itemize}
 
