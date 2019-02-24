@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{amssymb,amsmath,amsthm}
+\usepackage{mathtools}
 
 \usepackage{wrapfig, tikz, tikz-cd}
 \usetikzlibrary{arrows, arrows, calc, decorations.markings, automata,calc}
@@ -9,6 +10,9 @@
 \hypersetup{colorlinks=false,linkbordercolor=red,linkcolor=green,pdfborderstyle={/S/U/W 2}}
 
 \usepackage{url}
+
+
+
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -26,7 +30,6 @@
 
 \newcommand{\dd}{\partial}
 \newcommand{\argmax}{\operatorname{argmax}}
-\newcommand{\cut}{\operatorname{cut}}
 \newcommand{\Span}{\operatorname{Span}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\KK}{\mathbb{K}}
@@ -35,12 +38,16 @@
 \newcommand{\be}{\beta}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\ph}{\varphi}
+\newcommand{\PP}{\mathbb{P}}
 \newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
 \newcommand{\BB}{\mathfrak{B}}
 \newcommand{\MM}{\mathfrak{M}}
 \newcommand{\kk}{\textbf{k}}
 \newcommand{\EE}{\mathbb{E}}
 \newcommand{\II}{\mathbb{I}}
+\newcommand{\eq}{\stackrel{\mathclap{\normalfont\text{def}}}{=}}
+
 
 \begin{document}
 
@@ -78,7 +85,7 @@ Bias-variance decomposition
 \item\label{ecdf}
 Empirical distribution function
 \begin{equation}
-	\hat{F}(x) = \sum_{i = 1}^n \II(X_i \leq x)
+	\hat{F_n}(x) = \sum_{i = 1}^n \II(X_i \leq x)
 \end{equation}
 
 \end{itemize}
@@ -101,6 +108,18 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 
 \section{Important distributions}
 \begin{itemize}
+	\item Student's $t$-distribution $t_\nu$, $\nu\in\RR_{>0}$
+	\begin{itemize}
+		\item pdf
+		\begin{equation}\label{t_pdf}
+			\frac{\Gamma(\frac{\nu+1}2)}{\sqrt{\pi\nu}\ \Gamma(\frac\nu2)}\left(1+\frac {x^2}\nu\right)^{-\frac{\nu+1}2}
+		\end{equation}
+		\item cdf
+		\begin{equation}\label{t_cdf}
+			\frac 12 +x\Gamma\left(\frac{\nu+1}2\right)\frac{_2F_1\left(\frac 12, \frac {\nu+1}2; \frac 32, -\frac {x^2}\nu\right)}{\sqrt{\pi\nu}\ \Gamma(\frac\nu2)}
+		\end{equation}
+		\item $t$-distribution with $n\in\NN$ degrees of freedom arises from the ratio of independent $N(0,1)$- and $\chi^2_n$-distributions
+	\end{itemize}
 	\item Poisson distribution Poisson$(\lambda),\ \lambda > 0$
 	\begin{itemize}
 		\item $\lambda$ is the average number of events per interval
@@ -176,7 +195,7 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 \end{itemize}
 
 \section{Fundamental results}
-\begin{theorem}
+\begin{theorem}\label{normaliid}
 	Let $X_1,\ldots X_n$ be an i.i.d. ramdom variables from the $N(\mu, \sigma^2)$ distribution, then
 	\begin{enumerate}
 		\item $\bar X$ is $N(\mu, \sigma^2/n)$ distributed;
@@ -238,6 +257,51 @@ Let $X_1, \ldots X_n$ be an i.i.d. sample drawn from the distribution $F$.
 \end{itemize}
 
 
+
+\section{Statistical tests}
+\subsection{$t$-tests}
+\subsubsection{One-sample $t$-test}
+Let $X_1, X_2,\ldots X_n$ be an i.i.d. sample from the $N(\mu, \sigma^2)$-distribution with $\mu$ and $\sigma^2$ unknown. Given $\mu_0\in\RR$ we test:
+\begin{equation}\label{ttest}
+	H_0:\mu\leq \mu_0 \text{ against } H_1: \mu>\mu_0
+\end{equation}
+Test statistic:
+\begin{equation}\label{tstatistic}
+	T = \sqrt{n}\frac{\bar X_n - \mu_0}{S_X}
+\end{equation}
+By Theorem \ref{normaliid}, under $\mu = \mu_0$ the statistic has Student's $t_{n-1}$ distribution, consequently we can use.
+\begin{equation}
+	\sup_{\mu\leq\mu_0}\PP \left(T \geq t_{n-1, 1-\alpha}\right) \leq \alpha
+\end{equation}
+
+\subsubsection{t-Test for paired observations}
+Let $(X_1, Y_1), (X_2, Y_2),\ldots (X_n, Y_n)$ be the i.i.d. sample of paired observations. We assume that $Z_i \eq X_i - Y_i$ is $N(\Delta, \sigma^2)$ is normally distributed, and the ordinary One-sample $t$-test can be used to test the null hypotheses $H_0:\Delta\geq0$. Note that if $X_i$ and $Y_i$ are strongly correlated then variance of $Z_i$ decreases and this improves the power of the $t$-test.
+
+\subsubsection{Two-sample $t$-test}
+Let $X_1, X_2,\ldots X_n$ and $Y_1, Y_2,\ldots Y_m$ be two mutually independent i.i.d samples from $N(\mu, \sigma^2)$ and $N(\nu, \sigma^2)$. The test checks
+\begin{equation}
+	H_0:\mu-\nu \leq 0 \text{ against } H_1: \mu-\nu>0
+\end{equation}
+Test statistic:
+\begin{align}
+	T =& \frac{\bar{X} - \bar{Y}}{S_{X,Y}\sqrt{\frac1n+\frac1m}}\\
+	S_{X,Y}^2 = \frac1{m+n-2}&\left(\sum_{i=1}^n (X_i - \bar X_n)^2+ \sum_{j=1}^m (Y_j - \bar Y_m)^2\right)
+\end{align}
+Theorem \ref{normaliid} implies that the squared denomenator follows $\sigma^2 \cdot \chi^2_{m+n-2}$ distribution.
+
+\subsection{Kolmogorov-Smirnov test}
+Given and i.i.d. sample $X_1, \ldots X_n$ from some unknown distribution $F$, we want to test:
+\begin{equation}\label{kstest}
+H_0: F = F_0 \text{ against } H_1: F\neq F_0
+\end{equation}
+The test statistic is given by
+\begin{equation}\label{ksstatistic}
+	T = \sup_{x\in\RR} |\hat F_n(x) - F(x)|,
+\end{equation}
+where $\hat F_n(x)$ stands for the empirical distribution function (see \ref{ecdf}). The distribution of $T$ is the same for every continuous cdf $F_0$. The following limit establishes the test:
+\begin{equation}
+\lim_{n\rightarrow \infty}\PP_{F_0}\left(T > \frac zn\right) = 2\sum_{j = 1}^\infty(-1)^{j+1}e^{-j^2z^2}
+\end{equation}
 
 
 
