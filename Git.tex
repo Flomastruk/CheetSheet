@@ -74,7 +74,99 @@
 
 
 
-\section{Base workflow cases}
+\subsection{Base workflow cases}
+
+
+\section{Setting up a Google Cloud project}
+\begin{itemize}
+  \item Log in your google account
+  \item Browse to cloud.google.com
+  \item Click on ``Go to Console''
+  \item Go to Navigation menu (three horizontal lines in the top left corner)
+  \item Select ``Compute Engine''
+  \item Click ``Create''
+  \item Select ``Allow full access to all Cloud APIs''
+  \item Now click ``Create''
+% SSH into
+  \item Click on ``SSH'' field in the VM list to open the console
+  \item To update the system configuration type ``sudo apt-get update''
+  \item To install Git type in ``sudo apt-get -y -qq install git''
+% Creating a Storage Bucket
+  \item Go to Navigation menu
+  \item Select ``Storage''
+  \item Click ``Create bucket''
+  \item Select appropriate settings
+  \item Now click ``Create''
+% Storing VM files to the Bucket
+  \item In console type gsutil cp [filename] gs:://[bucketname]/[pathname]
+  \item To publish cloud storage files to the web run gsutil acl ch -u AllUsers:R gs://[bucketname]/[pathname]
+% Launching Cloud Datalab
+  \item To launch Cloud Datalab, open a Cloud Shell in the Platform page (the icon is in the top right corner)
+  \item In Cloud Shell type ``gcloud compute zones list''
+  \item In Cloud Shell type ``datalab create mydatalabvm --zone [zonename]''
+  \item Creating Datalab VM may take several minutes
+  \item Click on ``Web Preview'' button in the top of the Cloud Shell and change port to 8081
+% Invoking BigQuery
+  \item Go to Navigation menu
+  \item Select ``BigQuery''
+  \item In More Options click ``Query settings''
+  \item Under Additional Settings ensure that Legacy is not enabled
+  \item In the query textbox type necessary SQL commands to extract data from big datasets
+% accessing data from DataLab
+  \item Create a notebook in Datalab
+  \item Define a valid query string in the notebook
+  \item Use the following logic:
+  \begin{enumerate}
+    \item import google.datalab.bigquery as bq
+    \item df = bq.Query(query).execute().result().to\_dataframe()
+    \item df.head()
+  \end{enumerate}
+% invoking Google pre-trained Machine Learning API
+\item Launch Cloud Datalab
+\item To download git repository contents use the logic
+\begin{enumerate}
+  \item \%bash
+  \item git clone [repositoryaddress] m -rf [pathname]
+\end{enumerate}
+\item Select APIs\&Services from Cloud Platform Navigation Menu
+\item Click ``Library'' and search for required API (e.g. Cloud Vision API, Translate API, Speech API, or Natural Language API)
+\item Click ``Enable'' if necessary
+\item In APIs\&Services click ``Credentials'' and create ``API key'' if necessary. This key will be used in Datalab code to invoke various APIs
+%Invoking ML APIs from Datalab
+\item In Datalab use APIKEY generated in credentials as ``developerKey'' parameter in Datalab code
+\item In Datalab, run
+``!pip install --upgrade google-api-python-client''
+\begin{itemize}
+  \item Translate API
+  \begin{enumerate}
+    \item from googleapiclient.discovery import build
+    \item service = build('translate', 'v2', developerKey=APIKEY)
+  \end{enumerate}
+  \item Vision API
+  \begin{enumerate}
+    \item import base64
+    \item vservice = build('vision', 'v1', developerKey=APIKEY)
+  \end{enumerate}
+  \item Natural Language API
+  \begin{enumerate}
+    \item lservice = build('language', 'v1beta1', developerKey=APIKEY)
+  \end{enumerate}
+  \item Speech API
+  \begin{enumerate}
+    \item build('speech', 'v1beta1', developerKey=APIKEY)
+  \end{enumerate}
+\end{itemize}
+% using BigQuery from Datalab
+
+  \item Launch Cloud Datalab
+  \item Use the following logic
+  \begin{itemize}
+    \item google.datalab.bigquery as bq
+    \item qry = \textsc{\char13}\textsc{\char13}\textsc{\char13} SELECT * FROM ...\textsc{\char13}\textsc{\char13}\textsc{\char13}
+    \item bq.Query(qry).execute().result().to\_dataframe()
+  \end{itemize}
+
+\end{itemize}
 
 
 \section{Useful links}
