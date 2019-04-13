@@ -45,6 +45,7 @@
 \newcommand{\MM}{\mathfrak{M}}
 \newcommand{\kk}{\textbf{k}}
 \newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
 \newcommand{\II}{\mathbb{I}}
 \newcommand{\eq}{\stackrel{\mathclap{\normalfont\text{def}}}{=}}
 
@@ -189,10 +190,15 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 			\begin{equation}
 				F_{\alpha,\lambda}(x) = \frac{\gamma(\alpha, x\beta)}{\Gamma(\alpha)}
 			\end{equation}
-
-
 	\end{itemize}
 \end{itemize}
+
+\begin{definition}
+	A family of probability densities $p_\theta$ that depends on a parameter $\theta$ is called a $k$-dimensional exponential family if there exist functions $c(\theta)$, $h(x)$, $Q_j(\theta)$, and $V_j(x)$ such that
+	\begin{equation*}
+		p_\theta(x) = c(\theta)h(x)e^{\sum_{j=1}^k Q_j(\theta)V_j(x)}
+	\end{equation*}
+\end{definition}
 
 \section{Fundamental results}
 \begin{theorem}\label{normaliid}
@@ -205,6 +211,34 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 	\end{enumerate}
 \end{theorem}
 \proof $\left\|X\right\|^2 - n \bar{X}^2 = (n-1)S_X^2$
+
+\begin{definition}\label{information_def}
+Let $X$ be a random variable defined on probability space $(\Omega,\PP_\theta),\ \theta\in\Theta$. Suppose that the likelihood function $\theta\mapsto\ell_\theta \eq \log p_\theta$ is differentiable for all $x\in\Omega$. The gradient
+\begin{equation*}
+	\dot{\ell_\theta}(x) = \frac{\partial}{\partial\theta}\ell_\theta(x)
+\end{equation*}
+is called the \emph{score function}. The \emph{Fisher information} is defined as the matrix
+\begin{equation*}
+	i_\theta = \VV_\theta\dot{\ell_\theta}(X)
+\end{equation*}
+\end{definition}
+
+\begin{theorem}
+	Suppose that $\Theta$ is compact and convex and that $\theta$ is identifiable, and let $\hat{\theta_n}$ be the maximum likelihood estimator based on a sample of size $n$ from the distribution with (marginal) probability density $p_\theta$. Suppose, furthermore, that the map $\vartheta\mapsto \log p_\vartheta(x)$ is continuously differentiable for all $x$, with derivative $\dot{\ell_\vartheta}(x)$, such that $\|\dot{\ell_\vartheta}(x)\|\leq L(x)$ for every $\vartheta\in\Theta$, where $L(x)$ is a function with $\EE_\theta L^2(X)<\infty$.
+	If $\theta$ is an interior point of $\Theta$ and the function $\theta\mapsto i_\theta$ is continuous and positive, then under $\theta$, $\sqrt{n}(\hat{\theta}_n - \theta)$
+	converges in distribution to a normal distribution with expectation $0$ and variance $i^{-1}_\theta$. Therefore, under $\theta$, as $n\rightarrow\infty$, we have
+	\begin{equation*}
+		\sqrt{n}(\hat{\theta_n} - \theta) \rightarrow N(0, i_\theta^{-1})
+	\end{equation*}
+\end{theorem}
+
+\begin{theorem}\label{cramerraobound}
+	Suppose $\theta\mapsto p_\theta(x)$ is differentiable for every $x$. Then under certain regularity conditions any unbiased estimator $T$ for $g(\theta)$ satisfies:
+	\begin{equation*}
+		\VV_\theta(T) \geq g'(\theta)I_\theta^{-1}g'(\theta)^T,
+	\end{equation*}
+	where $I_\theta$ denotes the \emph{full} information matrix.
+\end{theorem}
 
 
 \section{Estimators}
