@@ -53,8 +53,6 @@
 
 
 
-
-
 \title{Tensor Flow cheat sheet}
 \author{Efim Abrikosov}
 \maketitle
@@ -67,17 +65,42 @@
 \begin{itemize}
   \item \keywordmin{tf.feature\_column.numeric\_column(\emph{colname})}
   \item\keywordmin{tf.feature\_column.bucketized\_column(\emph{tf.feature\_coumn.numeric\_column}, \emph{boundaries\_list})}
+  \item\keywordmin{tf.feature\_column.crossed\_column(\emph{[tf.feature\_coumn.categorical\_column list]}, \emph{num\_hash\_buckets})}
   \item\keywordmin{tf.feature\_column.categorical\_column\_with\_identity(\emph{colname}, \emph{num\_buckets})}
   \item\keywordmin{tf.feature\_column.categorical\_column\_with\_vocabulary\_list(\emph{colname}, \emph{vocabulary\_list})}
   \item\keywordmin{tf.feature\_column.categorical\_column\_with\_hash\_bucket()\emph{colname}, \emph{hash\_bucket\_size})}
+  \item\keywordmin{tf.feature\_column.embedding\_column(\emph{tf.feature\_column.categorical\_column}, \emph{n\_dim})}
 \end{itemize}
 
 \section{Estimator API}
-{\keywordmin{tf.Estimator}}
+\href{https://www.tensorflow.org/guide/estimators}{\keywordmin{tf.estimator}}
 \begin{itemize}
+  \item \keywordmin{tf.estimator.Estimator(\emph{model\_fn, out\_dir})}
+  \begin{itemize}
+    \item \emph{model\_fn} is a function that returns \emph{tf.estimator.EstimatorSpec} given a triple (\emph{feature\_cols}, \emph{targets}, \emph{mode})
+
+    Sample signature: \keywordmin{tf.estimator.EstimatorSpec(\emph{**args})}
+
+    Arguments list consists of:
+    \begin{enumerate}
+      \item \emph{mode}, one of the three:
+
+       \keywordmin{tf.estimator.ModeKeys.TRAIN},
+
+        \keywordmin{tf.estimator.ModeKeys.EVAL},
+
+        \keywordmin{tf.estimator.ModeKeys.PREDICT}
+      \item \emph{predictions\_dict}
+      \item \emph{loss}
+      \item \emph{train\_op}
+      \item \emph{eval\_metrics\_ops}
+      \item \emph{export\_outputs}
+    \end{enumerate}
+    \item \emph{model\_dir} is the name of output directory (string)
+  \end{itemize}
   \item \keywordmin{tf.estimator.train\_and\_evaluate(estimator, train\_spec, eval\_spec)}
     \begin{itemize}
-      \item \emph{estimator} is an instance of \emph{tf.estimator}.
+      \item \emph{estimator} is an instance of \emph{tf.estimator}
 
       Sample singature: \keywordmin{tf.estimator.\emph{[model\_name]}(\emph{model\_dir}, \emph{feature\_columns}, \emph{model\_params})}
       \item \emph{train\_spec} is an instance of \emph{tf.estimator.TrainSpec}
@@ -87,7 +110,10 @@
 
       Sample signature: \keywordmin{tf.estimator.EvalSpec(\emph{input\_fn},\emph{steps}, \emph{start\_delay\_secs}, \emph{throttle\_secs})}
     \end{itemize}
+    \item Adding performance metrics
 
+    Sample signature:
+    \keywordmin{\emph{estimator} = tf.contrib.estimator.add\_metrics(\emph{estimator},\emph{rmse})}
 \end{itemize}
 
 
