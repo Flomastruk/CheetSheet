@@ -61,18 +61,28 @@
 
 
 \section{Main commands}
+\subsection{Git}
 \begin{itemize}
   \item \keywordmin{git help \emph{functionname}} --- display help information about Git
   \item \keywordmin{git init \emph{[-{}-template=templatedirectory]}} --- create an empty Git repository or reinitialize an existing one. Files and directories in the template directory whose name do not start with a dot will be copied to the directory after it is created.
   \item \keywordmin{git clone  \emph{repository [directory]}} --- clone a repository into a new directory. Optionally supply the name of a new directory to clone into.
-  \item \keywordmin{git add \emph{[filename]}} --- add file contents to the index
+  \item \keywordmin{git add \emph{[filename]}} --- updates the index using the current content found in the working tree, to prepare the content staged for the next commit. If filenames are specified, then only given files are staged
   \item \keywordmin{git commit  \emph{[-a][-m text]}} --- record changes to the repository
   \item \keywordmin{git diff  \emph{[cached]}}
-  \item \keywordmin{git status }
+  \item \keywordmin{git status}
 \end{itemize}
 
 
-
+\subsection{Anaconda environment management}
+\begin{itemize}
+  \item \keywordmin{conda env list} --- list all anaconda environments
+  \item \keywordmin{conda activate \emph{[envname]}} --- activate anaconda environment
+  \item \keywordmin{conda deactivate} --- deactivate current environment
+  \item \keywordmin{conda create \emph{[-{}-clone envname]} \emph{-n newenvname}} --- create a new environment
+  \item \keywordmin{conda remove -{}-name \emph{myenv} --all} --- remove existing environment
+  \item \keywordmin{conda install \emph{[-{}-name myenv]} \emph{packagename [= version]} } --- install package, if no environment is specified, the package is installed in the current environment
+  \item \keywordmin{conda remove \emph{[-n myenv]} \emph{packagename}} --- remove package, if no environment is specified, the package is removed from the current environment
+\end{itemize}
 
 \subsection{Base workflow cases}
 
@@ -173,6 +183,7 @@
 
 \begin{itemize}
 \item\href{https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf}{Git cheet sheet}
+\item\href{https://docs.conda.io/projects/conda/en/4.6.0/commands.html}{Anaconda command list}
 \end{itemize}
 
 \end{document}
