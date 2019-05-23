@@ -116,7 +116,17 @@
     \keywordmin{\emph{estimator} = tf.contrib.estimator.add\_metrics(\emph{estimator},\emph{rmse})}
 \end{itemize}
 
+\section{TensorBoard}
 
+\begin{itemize}
+  \item \keywordmin{\emph{filewriter\_name} = tf.summary.FileWriter(\emph{path\_name}, \emph{tf.graph} = tf.get\_default\_graph())}
+  \item \keywordmin{\emph{filewriter\_name}.close()}
+  \item in terminal or with \%\%bash magic
+  \begin{itemize}
+    \item \$ tensorboard -{}-logdir \emph{path\_name}
+  \end{itemize}
+
+\end{itemize}
 
 
 
