@@ -65,7 +65,7 @@ S_X^2 = \frac 1{n-1}\sum_{i = 1}^n(X_i - \bar X)^2
 
 \item
 Sample correlation coefficient
-\begin{equation}
+\begin{equation}\label{sample_correlation}
 r_{X,Y} = \frac{\sum_{i = 1}^{n}(X_i-\bar{X})(Y_i-\bar{Y})}{(n-1)\sqrt{(S_X^2S_Y^2)}}
 \end{equation}
 
@@ -193,7 +193,7 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 	\end{itemize}
 \end{itemize}
 
-\begin{definition}
+\begin{definition}\label{exponential_family}
 	A family of probability densities $p_\theta$ that depends on a parameter $\theta$ is called a $k$-dimensional exponential family if there exist functions $c(\theta)$, $h(x)$, $Q_j(\theta)$, and $V_j(x)$ such that
 	\begin{equation*}
 		p_\theta(x) = c(\theta)h(x)e^{\sum_{j=1}^k Q_j(\theta)V_j(x)}
@@ -224,20 +224,54 @@ is called the \emph{score function}. The \emph{Fisher information} is defined as
 \end{definition}
 
 \begin{theorem}
-	Suppose that $\Theta$ is compact and convex and that $\theta$ is identifiable, and let $\hat{\theta_n}$ be the maximum likelihood estimator based on a sample of size $n$ from the distribution with (marginal) probability density $p_\theta$. Suppose, furthermore, that the map $\vartheta\mapsto \log p_\vartheta(x)$ is continuously differentiable for all $x$, with derivative $\dot{\ell_\vartheta}(x)$, such that $\|\dot{\ell_\vartheta}(x)\|\leq L(x)$ for every $\vartheta\in\Theta$, where $L(x)$ is a function with $\EE_\theta L^2(X)<\infty$.
+	Suppose that $\Theta$ is compact and convex and that $\theta$ is identifiable, and let $\hat{\theta}_n$ be the maximum likelihood estimator based on a sample of size $n$ from the distribution with (marginal) probability density $p_\theta$. Suppose, furthermore, that the map $\vartheta\mapsto \log p_\vartheta(x)$ is continuously differentiable for all $x$, with derivative $\dot{\ell_\vartheta}(x)$, such that $\|\dot{\ell_\vartheta}(x)\|\leq L(x)$ for every $\vartheta\in\Theta$, where $L(x)$ is a function with $\EE_\theta L^2(X)<\infty$.
 	If $\theta$ is an interior point of $\Theta$ and the function $\theta\mapsto i_\theta$ is continuous and positive, then under $\theta$, $\sqrt{n}(\hat{\theta}_n - \theta)$
 	converges in distribution to a normal distribution with expectation $0$ and variance $i^{-1}_\theta$. Therefore, under $\theta$, as $n\rightarrow\infty$, we have
 	\begin{equation*}
-		\sqrt{n}(\hat{\theta_n} - \theta) \rightarrow N(0, i_\theta^{-1})
+		\sqrt{n}(\hat{\theta}_n - \theta) \rightarrow N(0, i_\theta^{-1})
 	\end{equation*}
 \end{theorem}
 
-\begin{theorem}\label{cramerraobound}
+\begin{theorem}\label{cramerraobound}\emph{(Cramer-Rao)}
 	Suppose $\theta\mapsto p_\theta(x)$ is differentiable for every $x$. Then under certain regularity conditions any unbiased estimator $T$ for $g(\theta)$ satisfies:
 	\begin{equation*}
 		\VV_\theta(T) \geq g'(\theta)I_\theta^{-1}g'(\theta)^T,
 	\end{equation*}
 	where $I_\theta$ denotes the \emph{full} information matrix.
+\end{theorem}
+
+
+\subsection{Sufficient Statistics and UMVU estimators}
+
+\begin{definition}
+	For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$ is called \emph{sufficient} (for r.v. $X$) if conditional distribution $f(x|V = v)$ is independent of $V$.
+\end{definition}
+
+\begin{theorem}\label{factorizarion}
+	A statistic $V(x)$ is sufficient if there exist functions $h(x)$ and $g(v, \theta)$ such that
+	$$
+	p_\theta(x) = h(x)g(V(x), \theta)
+	$$
+\end{theorem}
+
+\begin{theorem}\emph{(Rao-Blackwell)}
+	Let $V = V(X)$ be a sufficient statistic, and let $T = T(X)$ be an arbitrary real-valued estimator for $g(\theta)$. Then there exists an estimator $T^* = T^*(V)$ for $g(\theta)$ that depends only on $V$, such that $\EE_\theta T^* = \EE_\theta T$ and $\VV_\theta T^* \leq \VV_\theta T$ for all $\theta$. In particular, we have $\text{MSE}(\theta; T^*) \leq \text{MSE}(\theta; T)$. This inequality is strict unless $\PP_\theta(T^* = T) = 1$.
+\end{theorem}
+
+\begin{definition}
+For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$	is called complete if $\EE_\theta(f(V)) = 0,\ \forall \theta\in \Theta$ implies $f(V)=0$ a.s.
+\end{definition}
+
+\begin{theorem}
+	Let $V(x)$ be sufficient and complete, and $T(V)$ be an unbiased estimator for $g(\theta)$. Then $T(V)$ is UMVU estimator (i.e. has smallest variance among all unbiased estimators $\forall\theta\in\Theta$).
+\end{theorem}
+
+\begin{theorem}
+	Suppose that for a $k$-dimensional exponential family (\ref{exponential_family}) the set below contains an interior point:
+\begin{equation*}
+	(Q_1(\theta),\ldots Q_k(\theta)),\ \theta\in\Theta
+\end{equation*}
+Then the random vector $\left(V_1(x),\ldots V_n(x)\right)$ is sufficient and complete.
 \end{theorem}
 
 
@@ -292,6 +326,51 @@ Let $X_1, \ldots X_n$ be an i.i.d. sample drawn from the distribution $F$.
 
 
 \subsection{Linear Regression}
+
+\begin{theorem}\emph{(Ordinary Least Squares)}
+
+	\noindent(i) In one-factor setting, maximum likelihood estimators for slope, intercept and variance are given by (see (\ref{sample_variance}, \ref{sample_correlation})):
+	\begin{equation*}
+		\hat{\beta} = \frac {S_Y r_{X,Y}}{S_X},\ \ \hat{\alpha}= \bar Y - \hat{\beta}\bar{X},\ \ \hat{\sigma}^2 = \frac 1n\sum_{i = 1}^n = (Y_i - \hat\beta X_i - \hat\alpha)^2
+	\end{equation*}
+
+	\noindent(ii) If the design matrix $X$ in a multiple linear regression has full rank, then the maximum likelihood estimators are given by:
+	\begin{equation*}
+		\hat{\mathbf{\beta}} = (X^TX)^{-1}(X^T Y), \ \ \hat{\sigma}^2 = \frac {\|Y-X\hat\beta\|^2}n
+	\end{equation*}
+\end{theorem}
+
+\begin{theorem}\emph{(Weighted Least Squares/Heteroscedacity)}
+
+	\noindent(i) Assume that error terms $\varepsilon_i$ are have variance as $\sigma_i^2 \equiv z_i\sigma^2$ for known constants $z_i$. Let $w_i \eq (z_i\sigma^2)^{-1}$, then maximum likelihood estimators for slope, intercept and variance are given by (see (\ref{sample_variance}, \ref{sample_correlation})):
+	\begin{align*}
+		\tilde{\beta} = \frac{\sum w_i(x - \tilde x)(y - \tilde y)}{\sum w_i (x - \tilde x)^2} =& \frac{\sum w_i\sum w_i x_i y_i - \sum w_ix_i\sum w_i y_i}{\sum w_i\sum w_i x_i^2 - \left(\sum w_ix_i\right)^2}\\
+		\tilde\alpha =& \tilde y - \tilde \beta\tilde x\\
+		\hat\sigma^2 =& n^{-1}\sum\frac 1 z_i(y_i - \tilde \beta x_i - \tilde \alpha)^2
+	\end{align*}
+
+	\noindent(ii) For the multi-factor model, maximum likelihood estimators can be written in the form:
+	\begin{equation*}
+		\tilde \beta = (X^TWX)^{-1}(X^T WY)
+	\end{equation*}
+\end{theorem}
+
+
+
+
+\begin{theorem}
+	Let $V\eq \operatorname{span}(X)$, and $V_0\subset V$. Denote the projection onto $V$ by $P_V$.
+	\begin{enumerate}
+		\item The likelihood ratio statistic for $H_0:X \beta_0 \in V_0$ equals
+	\begin{equation*}
+		2\log\lambda_n(X, Y) = n\log\frac{\|(E - P_{V_0})Y\|^2}{\|(E - P_{V})Y\|^2},
+	\end{equation*}
+	\item Under the null hypothesis, the following quantity has $F_{n-p, p-p_0}$ distribution:
+	\begin{equation*}
+		\frac{\|(P_V - P_{V_0})Y\|^2/(p-p_0)}{\|(E - P_{V})Y\|^2/(n-p)}
+	\end{equation*}
+\end{enumerate}
+\end{theorem}
 
 
 \section{Statistical tests}
