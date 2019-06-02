@@ -104,6 +104,26 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 	\mathbb{E}F(X_{(k)}) = \frac k{n+1}
 \end{equation}
 
+\subsection{Time Series}
+
+Time series below are assumed to be \emph{weakly stationary} in the following sense:
+
+\begin{itemize}
+	\item Stochastic time series $X_t(\omega)$ are called \emph{weakly stationary}, if $\EE X_t$ and $\textbf{cov}(X_t, X_s)$ are inependent of time shifts; in particular, it first and second moments exist.
+	\item For a weakly stationary time series $X_t$, the following functios are defined:
+	\begin{itemize}
+		\item\emph{Autocovariance funciton}:
+		\begin{equation}
+			\gamma(h) = \textbf(X_{t+h}, X_t)
+		\end{equation}
+		\item \emph{Autocorrelation function}
+		\begin{equation}
+			\rho(h) = \frac {\gamma(h)}{\gamma(0)}
+		\end{equation}
+		\item \emph{Partial autocorrelation function} $\varphi{h}$ is defined as the coefficient of linear regression of $X_{t+h}$ on $X_t$ when controlled for constant and $X_{t+1}, \ldots X_{t+h-1}$ (see Proposition \ref{pac_properties}). In particular, $\varphi(0) = 1$ and $\varphi(1) = \rho(1)$
+	\end{itemize}
+
+\end{itemize}
 
 
 
@@ -201,6 +221,7 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 \end{definition}
 
 \section{Fundamental results}
+
 \begin{theorem}\label{normaliid}
 	Let $X_1,\ldots X_n$ be an i.i.d. ramdom variables from the $N(\mu, \sigma^2)$ distribution, then
 	\begin{enumerate}
@@ -223,6 +244,66 @@ is called the \emph{score function}. The \emph{Fisher information} is defined as
 \end{equation*}
 \end{definition}
 
+
+\subsection{Reminder on different convergence types}
+\begin{definition}
+	Let $X_n$ be a sequence of random variables defined on the probability space $\left(\Omega, \mathcal{F}, \PP\right)$:
+	\begin{itemize}
+		\item $X_n$ is said to converge to $X$ \emph{almost surely} if $\PP(\lim_{n\rightarrow \infty}(X_n = X) = 1$
+		\item convergence in probability
+		\item weak convergence
+		\item $L_p$ convergence
+	\end{itemize}
+\end{definition}
+
+\begin{theorem}
+	If a sequence of random variables converges almost surely then it converges in probability.
+\end{theorem}
+
+\begin{proposition}
+	Assume $\sum_{n\in\ZZ}\EE|X_n| < \infty$, then $\sum_{n\in\ZZ}X_n$ is defined as an almost sure limit and:
+	\begin{equation*}
+		\EE\sum_{n\in\ZZ}X_n = \sum_{n\in\ZZ}\EE X_n
+	\end{equation*}
+\end{proposition}
+\proof Established using Monotone and Dominated Convergence theorems applied to partial sums of random variables.
+
+\begin{proposition}
+	Let $(a_n)_{n\in\ZZ}$ be an element of $l^1(\ZZ)$, and let $(Z_t)_{n\in\ZZ}$ be a sequence of random variables satisfying $\EE |Z_t| < C_1\ \forall t$ for some constant $C_1$. Then the convolution
+	\begin{equation*}
+		X_t = \sum_{n\in\ZZ}a_nZ_{t-n}
+	\end{equation*}
+	is defined almost surely $\forall t\in \ZZ$.
+
+	Moreover, if there exists a constant such that $\EE Z_t^2 < C_2\ \forall t$, then $X_t$ is also a limit in $L^2$-norm and $\EE X_t^2\leq |a_n|_1^2C_2$.
+\end{proposition}
+
+
+\begin{theorem}\label{convl2l1}
+	Let $(a_n)_{n\in\ZZ}$ be a an element of $l^2(\ZZ)$. Let $Z_t = \sum_{n\in\ZZ}b_n e_{t-n}$, where $b_n$  is absolutely summable and $e_t$ is a sequence of uncorrelated $(0, \sigma^2)$ random variables.
+
+	Then there exists a sequence of random variables $X_t$, such that:
+	\begin{enumerate}
+		\item
+		\begin{equation*}
+			\lim_{n\rightarrow \infty}\EE\left\{\left(X_t - \sum_{n\in\ZZ} b_nZ_{t-n}\right)^2 \right\}= 0,
+		\end{equation*}
+		\item
+		\begin{equation*}
+			\lim_{n\rightarrow \infty}\EE\left\{\left(X_t - \sum_{n\in\ZZ} c_ne_{t-n}\right)^2 \right\}= 0,\ c_n = \sum_{j\in\ZZ}a_jb_{n-j},
+		\end{equation*}
+		\item
+		\begin{equation*}
+			\EE\left(X_tX_{t+h}\right) = \sum_{j\in\ZZ} c_jc_{j+h}\sigma^2
+		\end{equation*}
+	\end{enumerate}
+\end{theorem}
+
+\begin{corollary}
+	All statements of Theorem \ref{convl2l1} are true if $(a_n)_{n\in\ZZ}$ is absolutely summable, and $(b_n)_{n\in\ZZ}$ is square summable.
+\end{corollary}
+
+\subsection{Estimator convergence via information matrix}
 \begin{theorem}
 	Suppose that $\Theta$ is compact and convex and that $\theta$ is identifiable, and let $\hat{\theta}_n$ be the maximum likelihood estimator based on a sample of size $n$ from the distribution with (marginal) probability density $p_\theta$. Suppose, furthermore, that the map $\vartheta\mapsto \log p_\vartheta(x)$ is continuously differentiable for all $x$, with derivative $\dot{\ell_\vartheta}(x)$, such that $\|\dot{\ell_\vartheta}(x)\|\leq L(x)$ for every $\vartheta\in\Theta$, where $L(x)$ is a function with $\EE_\theta L^2(X)<\infty$.
 	If $\theta$ is an interior point of $\Theta$ and the function $\theta\mapsto i_\theta$ is continuous and positive, then under $\theta$, $\sqrt{n}(\hat{\theta}_n - \theta)$
@@ -274,6 +355,31 @@ For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic
 Then the random vector $\left(V_1(x),\ldots V_n(x)\right)$ is sufficient and complete.
 \end{theorem}
 
+
+\subsection{Time Series}
+
+\begin{theorem}
+	The real valued function $\rho(h)$ is the correlation function of a real valued stationary time series $X_t(\omega)$ with index set $t\in\ZZ$ if and only if it is representable in the form
+\begin{equation*}
+	\rho(h) = \int_{-\pi}^\pi e^{ihx}dG(x),
+\end{equation*}
+	where $G(x)$ is a symmetric distribution function.
+\end{theorem}
+
+
+\begin{proposition}\label{pac_properties} Let $X_t$ be weakly stationary time series:
+	\begin{enumerate}
+		\item The partial autocorrelation coefficient $\varphi(h)$ equals $\theta_{hh}$ in the linear regression:
+		\begin{equation*}
+			X_{t+h} = \theta_{0h} + \theta_{1h}X_{t+h-1} + \ldots + \theta_{hh}X_t + a_{ht}
+		\end{equation*}
+		\item Let $\rho_{t+h,t\cdot(t+1, \ldots t+h-1)}$ denote the partial correlation of $X_{t+h}$ and $X_t$ when controlled for $X_{t+1}, \ldots X_{t+h-1}$. The squared norm of the residual term in the regression above equals:
+		\begin{equation*}
+			\EE(a_{ht}^2) = \gamma(0)\prod_{i = 1}^{h}(1-\rho_{t+h, t+i-1\cdot(t+i, \ldots t+h-1)}^2)
+		\end{equation*}
+	\end{enumerate}
+\end{proposition}
+\proof These statements follow from basic Eucledian geometry. Denote by $P$ the projection onto the subspace spanned by $X_{t+i}, \ldots X_{t+h-1}$. Now consider sequentially orthogonal decompositions $X_{t+h} = P(X_{t+h}) + (1 - P)(X_{t+h})$ and look at the component of the second summand along $(1 - P)(X_{t+i})$.
 
 \section{Estimators}
 
