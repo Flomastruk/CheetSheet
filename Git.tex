@@ -63,7 +63,7 @@
 \section{Main commands}
 \subsection{Git}
 \begin{itemize}
-  \item \keywordmin{git help \emph{functionname}} --- display help information about Git
+  \item \keywordmin{git help \emph{commandname}} --- display help information about Git command
   \item \keywordmin{git init \emph{[-{}-template=templatedirectory]}} --- create an empty Git repository or reinitialize an existing one. Files and directories in the template directory whose name do not start with a dot will be copied to the directory after it is created.
   \item \keywordmin{git clone  \emph{repository [directory]}} --- clone a repository into a new directory. Optionally supply the name of a new directory to clone into.
   \item \keywordmin{git add \emph{[filename]}} --- updates the index using the current content found in the working tree, to prepare the content staged for the next commit. If filenames are specified, then only given files are staged
@@ -75,12 +75,16 @@
 
 \subsection{Anaconda environment management}
 \begin{itemize}
+  \item \keywordmin{conda \emph{commandname} -h} --- display help information about command
   \item \keywordmin{conda env list} --- list all anaconda environments
+  \item \keywordmin{conda list -n \emph{myenv}} --- list packages installed in the environment
   \item \keywordmin{conda activate \emph{[envname]}} --- activate anaconda environment
   \item \keywordmin{conda deactivate} --- deactivate current environment
   \item \keywordmin{conda create \emph{[-{}-clone envname]} \emph{-n newenvname}} --- create a new environment
-  \item \keywordmin{conda remove -{}-name \emph{myenv} --all} --- remove existing environment
+  \item \keywordmin{conda remove -{}-name \emph{myenv} -{}-all} --- remove existing environment
   \item \keywordmin{conda install \emph{[-{}-name myenv]} \emph{packagename [= version]} } --- install package, if no environment is specified, the package is installed in the current environment
+  \emph \keywordmin{conda search \emph{packagename}} --- search for packages with a given name
+  \item \keywordmin{install -{}-revision \emph{revnum}} --- revert to a given revision
   \item \keywordmin{conda remove \emph{[-n myenv]} \emph{packagename}} --- remove package, if no environment is specified, the package is removed from the current environment
 \end{itemize}
 
