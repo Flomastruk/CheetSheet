@@ -358,6 +358,46 @@ Then the random vector $\left(V_1(x),\ldots V_n(x)\right)$ is sufficient and com
 
 \subsection{Time Series}
 
+\begin{proposition}\label{diff_sol}
+	Given the difference equation of order $n$:
+	\begin{equation}\label{diff_sol_rec}
+		y_t + a_1y_{t-1} + a_2y_{t-2} + \ldots + a_ny_{t-n} = r_t, \ t = n, n+1, \ldots
+	\end{equation}
+	The solution $\left(y_n\right)_{n = 0}^{\infty}$ can be expressed in the form:
+	\begin{equation*}
+		y_t =  \sum_{i = 0}^t w_ir_{t-i}, \ t = 0, 1, \ldots
+	\end{equation*}
+	with $w_i\equiv0$ for $i<0$, and satisfying the homogeneous differrence equaition of $(y_t)$:
+	\begin{equation}\label{diff_sol_rel}
+		\sum_{i = 0}^n a_iw_{t-i} = 0,\ i = 1, 2,\ldots
+	\end{equation}
+
+\end{proposition}
+\proof
+Using recursive formula (\ref{diff_sol_rec}) for $y_t$, any element of the sequence can be written in the form:
+\begin{equation*}
+	y_t = \sum_{i = 0}^t w_i^{(t)} r_{t-i}
+\end{equation*}
+for some $w_i^{(t)}$ with $t\in\ZZ_{\geq 0},\ 0\leq i\leq t$.
+Using inductive argument, we show that
+\begin{enumerate}
+	\item $w_i^{(t)}\equiv w_i$ for some constant depending on $i$ only
+	\item The sequence $w_i$ satisfies equation (\ref{diff_sol_rel})
+\end{enumerate}
+
+Indeed, from the equation \ref{diff_sol_rec} it is immediate to see that $w_0 = 1$ and $w_1 = -a_1$. Assuming that the pair of statements above is shown for $s < t$, write:
+
+\begin{equation}\label{diff_sol_pr}
+	y_t = r_t - \sum_{k = 0}^{n}a_k^{(t)}y_{t-k}=r_t - \sum_{k = 1}^{t}a_k\sum_{j = 0}^{t - k} w_jr_{t - k - j}
+\end{equation}
+By definition, we set $w_t$ to be the coefficient of $r_0$, that is,  $w_t = - \sum_{i = 1}^n a_iw_{t-i}$. Moreover, by rearranging terms in \ref{diff_sol_pr}, we get:
+\begin{equation*}
+	y_t = -\sum_{j = 0}^t r_j \sum_{k = 1}^{t-j}{a_k w_{t-j-k}},
+\end{equation*}
+it follows that the coefficient $w_{t-j}^{(t)}$ of $r_j, \ j = 1, \ldots t,$ is equal to $w_{t-j}$ by induction assumpiton and it concludes the proof.
+
+
+
 \begin{theorem}
 	The real valued function $\rho(h)$ is the correlation function of a real valued stationary time series $X_t(\omega)$ with index set $t\in\ZZ$ if and only if it is representable in the form
 \begin{equation*}
