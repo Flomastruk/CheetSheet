@@ -42,6 +42,7 @@
 \newcommand{\ZZ}{\mathbb{Z}}
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\BB}{\mathfrak{B}}
+\newcommand{\CC}{\mathbb{C}}
 \newcommand{\MM}{\mathfrak{M}}
 \newcommand{\kk}{\textbf{k}}
 \newcommand{\EE}{\mathbb{E}}
@@ -114,13 +115,13 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 	\begin{itemize}
 		\item\emph{Autocovariance funciton}:
 		\begin{equation}
-			\gamma(h) = \textbf(X_{t+h}, X_t)
+			\gamma_X(h) = \EE(X_{t+h}, X_t)
 		\end{equation}
 		\item \emph{Autocorrelation function}
 		\begin{equation}
-			\rho(h) = \frac {\gamma(h)}{\gamma(0)}
+			\rho_X(h) = \frac {\gamma_X(h)}{\gamma_X(0)}
 		\end{equation}
-		\item \emph{Partial autocorrelation function} $\varphi{h}$ is defined as the coefficient of linear regression of $X_{t+h}$ on $X_t$ when controlled for constant and $X_{t+1}, \ldots X_{t+h-1}$ (see Proposition \ref{pac_properties}). In particular, $\varphi(0) = 1$ and $\varphi(1) = \rho(1)$
+		\item \emph{Partial autocorrelation function} $\varphi(h)$ is defined as the coefficient the regression of $X_{t+h}$ on $X_t$ when controlled for constant and $X_{t+1}, \ldots X_{t+h-1}$ (see Proposition \ref{pac_properties}). In particular, $\varphi(0) = 1$ and $\varphi(1) = \rho(1)$
 	\end{itemize}
 
 \end{itemize}
@@ -222,8 +223,11 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 
 \section{Fundamental results}
 
+
+\subsection{Basic statistics}
+
 \begin{theorem}\label{normaliid}
-	Let $X_1,\ldots X_n$ be an i.i.d. ramdom variables from the $N(\mu, \sigma^2)$ distribution, then
+	Let $X_1,\ldots X_n$ be an i.i.d. random variables from the $N(\mu, \sigma^2)$ distribution, then
 	\begin{enumerate}
 		\item $\bar X$ is $N(\mu, \sigma^2/n)$ distributed;
 		\item $(n-1)S_X^2/\sigma^2$ is $\chi^2_{n-1}$-distributed (see \ref{sample_variance});
@@ -233,26 +237,15 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 \end{theorem}
 \proof $\left\|X\right\|^2 - n \bar{X}^2 = (n-1)S_X^2$
 
-\begin{definition}\label{information_def}
-Let $X$ be a random variable defined on probability space $(\Omega,\PP_\theta),\ \theta\in\Theta$. Suppose that the likelihood function $\theta\mapsto\ell_\theta \eq \log p_\theta$ is differentiable for all $x\in\Omega$. The gradient
-\begin{equation*}
-	\dot{\ell_\theta}(x) = \frac{\partial}{\partial\theta}\ell_\theta(x)
-\end{equation*}
-is called the \emph{score function}. The \emph{Fisher information} is defined as the matrix
-\begin{equation*}
-	i_\theta = \VV_\theta\dot{\ell_\theta}(X)
-\end{equation*}
-\end{definition}
-
 
 \subsection{Reminder on different convergence types}
 \begin{definition}
-	Let $X_n$ be a sequence of random variables defined on the probability space $\left(\Omega, \mathcal{F}, \PP\right)$:
+	Let $X_n$ be a sequence of random variables defined on the probability space $\left(\Omega, \PP\right)$:
 	\begin{itemize}
-		\item $X_n$ is said to converge to $X$ \emph{almost surely} if $\PP(\lim_{n\rightarrow \infty}(X_n = X) = 1$
+		\item $X_n$ is said to converge to $X$ \emph{almost surely} if $\PP(\lim_{n\rightarrow \infty}X_n = X) = 1$
 		\item convergence in probability
 		\item weak convergence
-		\item $L_p$ convergence
+		\item $L_p$-convergence
 	\end{itemize}
 \end{definition}
 
@@ -269,7 +262,7 @@ is called the \emph{score function}. The \emph{Fisher information} is defined as
 \proof Established using Monotone and Dominated Convergence theorems applied to partial sums of random variables.
 
 \begin{proposition}
-	Let $(a_n)_{n\in\ZZ}$ be an element of $l^1(\ZZ)$, and let $(Z_t)_{n\in\ZZ}$ be a sequence of random variables satisfying $\EE |Z_t| < C_1\ \forall t$ for some constant $C_1$. Then the convolution
+	Let $(a_n)_{n\in\ZZ}$ be an element of $l^1(\ZZ)$, and let $(Z_t)_{t\in\ZZ}$ be a sequence of random variables satisfying $\EE |Z_t| < C_1\ \forall t$ for some constant $C_1$. Then the convolution
 	\begin{equation*}
 		X_t = \sum_{n\in\ZZ}a_nZ_{t-n}
 	\end{equation*}
@@ -278,83 +271,98 @@ is called the \emph{score function}. The \emph{Fisher information} is defined as
 	Moreover, if there exists a constant such that $\EE Z_t^2 < C_2\ \forall t$, then $X_t$ is also a limit in $L^2$-norm and $\EE X_t^2\leq |a_n|_1^2C_2$.
 \end{proposition}
 
-
-\begin{theorem}\label{convl2l1}
-	Let $(a_n)_{n\in\ZZ}$ be a an element of $l^2(\ZZ)$. Let $Z_t = \sum_{n\in\ZZ}b_n e_{t-n}$, where $b_n$  is absolutely summable and $e_t$ is a sequence of uncorrelated $(0, \sigma^2)$ random variables.
-
-	Then there exists a sequence of random variables $X_t$, such that:
+\begin{theorem}
+	Let $(X_t)_{t\in \ZZ}\in L^2\left(\Omega, \PP, \CC^{d_X}\right)$ and $(Y_t)_{t\in \ZZ}\in L^2\left(\Omega, \PP, \CC^{d_Y}\right)$. Let $(a_m)_{m\in\ZZ} \in l^1(\ZZ, \CC^{d'_X\times d_X})$ and $(b_n)_{n\in\ZZ} \in l^1(\ZZ, \CC^{d'_Y\times d_Y})$. Then
 	\begin{enumerate}
-		\item
-		\begin{equation*}
-			\lim_{n\rightarrow \infty}\EE\left\{\left(X_t - \sum_{n\in\ZZ} b_nZ_{t-n}\right)^2 \right\}= 0,
-		\end{equation*}
-		\item
-		\begin{equation*}
-			\lim_{n\rightarrow \infty}\EE\left\{\left(X_t - \sum_{n\in\ZZ} c_ne_{t-n}\right)^2 \right\}= 0,\ c_n = \sum_{j\in\ZZ}a_jb_{n-j},
-		\end{equation*}
-		\item
-		\begin{equation*}
-			\EE\left(X_tX_{t+h}\right) = \sum_{j\in\ZZ} c_jc_{j+h}\sigma^2
+		\item Convolutions $\left(a*X\right)_t$ and $\left(b*Y\right)_t$ are well-defined elements of $L^2\left(\Omega, \PP, \CC^{d'_X}\right)$ and $L^2\left(\Omega, \PP, \CC^{d'_Y}\right)$.
+		\item \begin{equation*}
+			\gamma_{a*X,b*Y}(h) = \sum_{m,n\in\ZZ}a_m\gamma_{X,Y}(h+n-m)\bar{b}_n^T %= (a*\gamma_{X,Y}*\bar b^T)_h % not true
 		\end{equation*}
 	\end{enumerate}
 \end{theorem}
 
 \begin{corollary}
-	All statements of Theorem \ref{convl2l1} are true if $(a_n)_{n\in\ZZ}$ is absolutely summable, and $(b_n)_{n\in\ZZ}$ is square summable.
+	 Let $(a_m),\ (b_n)\in l^1(\ZZ)$ and $(e_t)_{t\in\ZZ}$ be a sequence of uncorrelated $(0, \sigma^2)$ random variables. Denote Let $X_t = (a*e)_t,\ Y_t = (b*X)_t$. Then
+	\begin{enumerate}
+		\item
+		\begin{equation*}\label{gamma_conv1}
+			\gamma_X(h) = \sum_{n\in\ZZ}a_ma_{m-h}\sigma^2
+		\end{equation*}
+		\item
+		\begin{equation}\label{gamma_conv2}
+			\gamma_Y(h) = \sum_{n\in\ZZ}c_nc_{n-h}\sigma^2,
+		\end{equation}
+	where $c_n = (a*b)_n$.
+	\end{enumerate}
 \end{corollary}
 
-\subsection{Estimator convergence via information matrix}
+\begin{theorem}\label{convl1l2}
+	Let $(a_m)\in l^1(\ZZ),\ (b_n)\in l^2(\ZZ)$ and $(e_t)_{t\in\ZZ}$ be a sequence of uncorrelated $(0, \sigma^2)$ random variables. Denote $X_t = (a*e)_t$, then
+	\begin{enumerate}
+		\item For each $t\in\ZZ$ random variable $Y_t$ defined as $L_2$-limit of the sequence $\sum_{n = - N}^Nb_nX_{t-n}$ is well defined.
+		\item  Formula (\ref{gamma_conv2}) holds for $Y_t$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{corollary}
+	For $(b_n)\in l^2(\ZZ)$ the sequence $(b*e)_t$ is defined in $L^2(\Omega, \PP)$
+\end{corollary}
+
 \begin{theorem}
-	Suppose that $\Theta$ is compact and convex and that $\theta$ is identifiable, and let $\hat{\theta}_n$ be the maximum likelihood estimator based on a sample of size $n$ from the distribution with (marginal) probability density $p_\theta$. Suppose, furthermore, that the map $\vartheta\mapsto \log p_\vartheta(x)$ is continuously differentiable for all $x$, with derivative $\dot{\ell_\vartheta}(x)$, such that $\|\dot{\ell_\vartheta}(x)\|\leq L(x)$ for every $\vartheta\in\Theta$, where $L(x)$ is a function with $\EE_\theta L^2(X)<\infty$.
-	If $\theta$ is an interior point of $\Theta$ and the function $\theta\mapsto i_\theta$ is continuous and positive, then under $\theta$, $\sqrt{n}(\hat{\theta}_n - \theta)$
-	converges in distribution to a normal distribution with expectation $0$ and variance $i^{-1}_\theta$. Therefore, under $\theta$, as $n\rightarrow\infty$, we have
+	Conclusions of Theorem \ref{convl1l2} hold for $(a_m)\in l^2(\ZZ),\ (b_n)\in~l^1(\ZZ)$
+\end{theorem}
+
+
+\begin{theorem}\label{infARinfMA}
+	\begin{enumerate}
+	\item
+	Let $X_t$ be an $AR(p)$ process given by
 	\begin{equation*}
-		\sqrt{n}(\hat{\theta}_n - \theta) \rightarrow N(0, i_\theta^{-1})
+		X_t + \sum_{j = 0}^p a_j X_{t-j} = e_t,
 	\end{equation*}
-\end{theorem}
-
-\begin{theorem}\label{cramerraobound}\emph{(Cramer-Rao)}
-	Suppose $\theta\mapsto p_\theta(x)$ is differentiable for every $x$. Then under certain regularity conditions any unbiased estimator $T$ for $g(\theta)$ satisfies:
+	where $(e_t)_{t\in\ZZ}$ is a sequence of uncorrelated $(0, \sigma^2)$ random variables. Suppose that all roots of the polynomial
 	\begin{equation*}
-		\VV_\theta(T) \geq g'(\theta)I_\theta^{-1}g'(\theta)^T,
+		m^p+\sum_{j = 0}^p a_j m^{p-j}
 	\end{equation*}
-	where $I_\theta$ denotes the \emph{full} information matrix.
+	have magnitude less than $1$.
+	Then $X_t$ admits an infinite $MA$-presentation $X_t = \sum_{j=0}^\infty w_j e_{t-j}$, where
+	\begin{align*}
+		w_0 &= 1\\
+		w_j &+ \sum_{i = 1}^j a_iw_{j-i} = 0,\ j = 1,\ldots p-1\\
+		w_j &+ \sum_{i = 1}^p a_iw_{j-i} = 0,\ j = p,p+1,\ldots
+	\end{align*}
+	\item
+	Let $X_t$ be an $MA(q)$ process given by
+	\begin{equation*}
+		X_t = e_t + \sum_{j = 0}^q b_j e_{t-j}
+	\end{equation*}
+	where $(e_t)_{t\in\ZZ}$ is a sequence of uncorrelated $(0, \sigma^2)$ random variables. Suppose that all roots of the polynomial
+	\begin{equation*}
+		m^p+\sum_{j = 0}^q b_j m^{q-j}
+	\end{equation*}
+	have magnitude less than $1$.
+	Then $X_t$ admits an infinite $AR$-presentation $\sum_{j=0}^\infty c_jX_{t-j} =  e_t$, where
+	\begin{align*}
+		c_0 &= 1\\
+		c_j &+ \sum_{i = 1}^j b_ic_{j-i} = 0,\ j = 1,\ldots q-1\\
+		c_j &+ \sum_{i = 1}^p b_ic_{j-i} = 0,\ j = q,q+1,\ldots
+	\end{align*}
+\end{enumerate}
 \end{theorem}
 
+\begin{proposition}
+	Let $X_t$ be an $AR(p)$ process satisfying conditions of Theorem \ref{infARinfMA}. Then the partial autocorrelation function $\varphi(h) = 0$ for $h > p$
+\end{proposition}
+\proof By definition, $\varphi(h)$ is the correlation between  the $X_{t-h}$ and the residual obtained from the regression of $X_t$ on $X_{t-1},\ldots X_{t-h+1}$. The latter is $e_t$ and the result follows.
 
-\subsection{Sufficient Statistics and UMVU estimators}
-
-\begin{definition}
-	For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$ is called \emph{sufficient} (for r.v. $X$) if conditional distribution $f(x|V = v)$ is independent of $V$.
-\end{definition}
-
-\begin{theorem}\label{factorizarion}
-	A statistic $V(x)$ is sufficient if there exist functions $h(x)$ and $g(v, \theta)$ such that
-	$$
-	p_\theta(x) = h(x)g(V(x), \theta)
-	$$
-\end{theorem}
-
-\begin{theorem}\emph{(Rao-Blackwell)}
-	Let $V = V(X)$ be a sufficient statistic, and let $T = T(X)$ be an arbitrary real-valued estimator for $g(\theta)$. Then there exists an estimator $T^* = T^*(V)$ for $g(\theta)$ that depends only on $V$, such that $\EE_\theta T^* = \EE_\theta T$ and $\VV_\theta T^* \leq \VV_\theta T$ for all $\theta$. In particular, we have $\text{MSE}(\theta; T^*) \leq \text{MSE}(\theta; T)$. This inequality is strict unless $\PP_\theta(T^* = T) = 1$.
-\end{theorem}
-
-\begin{definition}
-For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$	is called complete if $\EE_\theta(f(V)) = 0,\ \forall \theta\in \Theta$ implies $f(V)=0$ a.s.
-\end{definition}
-
-\begin{theorem}
-	Let $V(x)$ be sufficient and complete, and $T(V)$ be an unbiased estimator for $g(\theta)$. Then $T(V)$ is UMVU estimator (i.e. has smallest variance among all unbiased estimators $\forall\theta\in\Theta$).
-\end{theorem}
-
-\begin{theorem}
-	Suppose that for a $k$-dimensional exponential family (\ref{exponential_family}) the set below contains an interior point:
-\begin{equation*}
-	(Q_1(\theta),\ldots Q_k(\theta)),\ \theta\in\Theta
-\end{equation*}
-Then the random vector $\left(V_1(x),\ldots V_n(x)\right)$ is sufficient and complete.
-\end{theorem}
-
+\begin{proposition}
+	Let $X_t$ be an $AR(p)$ process satisfying conditions of Theorem \ref{infARinfMA}. Then autocovariance function $\gamma(h)$ satisfies:
+	\begin{align*}
+		\gamma(0) + a_1\gamma(1) +\ldots +a_p\gamma(p) &= \sigma^2\\
+		\gamma(h) + a_1\gamma(h-1) +\ldots +a_p\gamma(h-p) &= 0,\ h>0
+	\end{align*}
+\end{proposition}
+\noindent\emph{Remark:} this result allows one to express $\gamma(0), \ldots \gamma(p)$ through the coefficients $a_1,\ldots a_p$ and vice versa.
 
 \subsection{Time Series}
 
@@ -420,6 +428,128 @@ it follows that the coefficient $w_{t-j}^{(t)}$ of $r_j, \ j = 1, \ldots t,$ is 
 	\end{enumerate}
 \end{proposition}
 \proof These statements follow from basic Eucledian geometry. Denote by $P$ the projection onto the subspace spanned by $X_{t+i}, \ldots X_{t+h-1}$. Now consider sequentially orthogonal decompositions $X_{t+h} = P(X_{t+h}) + (1 - P)(X_{t+h})$ and look at the component of the second summand along $(1 - P)(X_{t+i})$.
+
+
+\begin{proposition}\label{tsOLS}
+Let $(Y_t)_{t\in\ZZ}$ be a sequence of elements in $L^2\left(\Omega, \PP, \CC\right)$, denote $\textbf{Y}_n \equiv (Y_1, \ldots, Y_n)$. Let $\hat Y_{n+s}(Y_1,\ldots Y_n) \equiv \textbf{Y}_n b_{n,s}, \ b_{n,s}\in \CC^n$ be a linear predictor minimizing mean squared error
+\begin{equation*}
+	\tau_{n,s}^2\eq\text{MSE}\left(Y_{n+s},\hat Y_{n+s}(Y_1,\ldots Y_n)\right)\equiv  \EE\left\{\|Y_{n+s} - \hat Y_{n+s}\|^2\right\}
+\end{equation*}
+Then $b_{n,s} = (\VV_{n,n})^{+}V_{n, s}$ is a solution, where
+\begin{align*}
+	V_{n,s} &\eq \EE\left(\textbf{Y}_n^T Y_{n+s}\right)\\ \VV_{n,n} &\eq \EE\left(\textbf{Y}_n^T \textbf{Y}_n\right)
+\end{align*}
+Furthermore, MSE is given by:
+\begin{equation*}
+	\tau_{n,s}^2 = \VV(Y_{n+s}) - b_{n,s}^TV_{n,s} = \VV(Y_{n+s}) - V_{n,s}^T \VV_{n,n}^+V_{n,s}
+\end{equation*}
+\end{proposition}
+\proof Follows from standard linear regression theory.
+
+\begin{definition}
+	A time-series is \emph{nonsingular (regular, nondeterministic)} if the sequence of mean squared errors of one-preriod prediction $\tau_{n,1}^2$ is bounded away from zero. A time series is \emph{singular (deterministic)} if
+	\begin{equation*}
+		\lim_{n\rightarrow \infty} \tau_{n,1} = 0
+	\end{equation*}
+\end{definition}
+
+\begin{theorem}
+Let $Y_t, b_{n,s}$  and $\tau_{n,s}$ be as defined in Proposition \ref{tsOLS} and assume that $Y_t$ is weakly stationary, nondeterministic. Denote the components of $b_{n,s}$ by $b_{n,s,i},\ i=1,\ldots n$ so that
+\begin{equation*}
+	\hat Y_{n+s}(Y_1,\ldots Y_n) = \sum_{i = 1}^n b_{n,s,i}Y_i
+\end{equation*}
+Then the following recursive relations take place:
+\begin{enumerate}
+	\item $$b_{n,s,1} = \tau_{n-1,1}^{-2}\left(\gamma(n+s-1) - \sum_{i=1}^nb_{n-1,s,i}\gamma(n+s-1-i)\right)$$
+	\item $\tau_{n,s}^2 = \tau_{n-1,s}^2 - b_{n,s,1}\tau_{n-1,1}^2$
+	\item $
+	\begin{pmatrix} b_{n,s,2} \\ b_{n,s,3}\\ \vdots\\b_{n,s,n}\end{pmatrix} =
+	\begin{pmatrix} b_{n-1,s,2} \\ b_{n-1,s,3}\\ \vdots\\b_{n-1,s,n} \end{pmatrix} - b_{n,s,1}
+	\begin{pmatrix}
+		b_{n-1,1,n-1} \\ b_{n-1,1,n-2}\\ \vdots\\b_{n-1,1,1}
+	\end{pmatrix}$
+\end{enumerate}
+\end{theorem}
+\noindent\emph{Remark.} Note that one-step prediction terms, $\tau_{n-1,1}$ and $b_{n-1,1}$, appear in the recursion, and the components of the last vector are reversed.
+
+\begin{theorem}\emph{(Gram-Schmidt)} Let
+	Let $(Y_t)_{t\in\ZZ}$ from $L^2\left(\Omega, \PP, \CC\right)$ be a zero-mean, stationary, nondeterministic time series.
+
+Then one can write $Y_t = \sum_{i=1}^t c_{t,i}Z_i$ where
+\begin{align*}
+	\EE& Z_{t,i} = 0\\
+	\EE& \left(Z_{t,i}Z_{t,j}\right) =\delta_{ij}\kappa_i^2\\
+	c_{t,1} &= \kappa_1^{-2}\gamma_Y(t-1)\\
+	c_{t,i} &= \kappa_{i}^{-2}\left(\gamma_Y(t-i) - \sum_{j<i}c_{t,j}c_{i,j}\kappa_i^2\right)\\
+	\kappa_t^2 &= \gamma_Y(0) - \sum_{i = 1}^{t-1}c_{t,i}^2\kappa_i^2
+\end{align*}
+\end{theorem}
+\proof This is a result of direct application of Gram-Schmidt orthogonalization algorythm to the sequence $Y_1, \ldots, Y_t$. Note that the process can be generalized to vector-valued processes.
+
+\subsection{Estimator convergence via information matrix}
+
+\begin{definition}\label{information_def}
+Let $X$ be a random variable defined on probability space $(\Omega,\PP_\theta),\ \theta\in\Theta$. Suppose that the likelihood function $\theta\mapsto\ell_\theta \eq \log p_\theta$ is differentiable for all $x\in\Omega$. The gradient
+\begin{equation*}
+	\dot{\ell_\theta}(x) = \frac{\partial}{\partial\theta}\ell_\theta(x)
+\end{equation*}
+is called the \emph{score function}. The \emph{Fisher information} is defined as the matrix
+\begin{equation*}
+	i_\theta = \VV_\theta\dot{\ell_\theta}(X)
+\end{equation*}
+\end{definition}
+
+\begin{theorem}
+	Suppose that $\Theta$ is compact and convex and that $\theta$ is identifiable, and let $\hat{\theta}_n$ be the maximum likelihood estimator based on a sample of size $n$ from the distribution with (marginal) probability density $p_\theta$. Suppose, furthermore, that the map $\vartheta\mapsto \log p_\vartheta(x)$ is continuously differentiable for all $x$, with derivative $\dot{\ell_\vartheta}(x)$, such that $\|\dot{\ell_\vartheta}(x)\|\leq L(x)$ for every $\vartheta\in\Theta$, where $L(x)$ is a function with $\EE_\theta L^2(X)<\infty$.
+	If $\theta$ is an interior point of $\Theta$ and the function $\theta\mapsto i_\theta$ is continuous and positive, then under $\theta$, $\sqrt{n}(\hat{\theta}_n - \theta)$
+	converges in distribution to a normal distribution with expectation $0$ and variance $i^{-1}_\theta$. Therefore, under $\theta$, as $n\rightarrow\infty$, we have
+	\begin{equation*}
+		\sqrt{n}(\hat{\theta}_n - \theta) \rightarrow N(0, i_\theta^{-1})
+	\end{equation*}
+\end{theorem}
+
+\begin{theorem}\label{cramerraobound}\emph{(Cramer-Rao)}
+	Suppose $\theta\mapsto p_\theta(x)$ is differentiable for every $x$. Then under certain regularity conditions any unbiased estimator $T$ for $g(\theta)$ satisfies:
+	\begin{equation*}
+		\VV_\theta(T) \geq g'(\theta)I_\theta^{-1}g'(\theta)^T,
+	\end{equation*}
+	where $I_\theta$ denotes the \emph{full} information matrix.
+\end{theorem}
+
+
+\subsection{Sufficient Statistics and UMVU estimators}
+
+\begin{definition}
+	For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$ is called \emph{sufficient} (for r.v. $X$) if conditional distribution $f(x|V = v)$ is independent of $V$.
+\end{definition}
+
+\begin{theorem}\label{factorizarion}
+	A statistic $V(x)$ is sufficient if there exist functions $h(x)$ and $g(v, \theta)$ such that
+	$$
+	p_\theta(x) = h(x)g(V(x), \theta)
+	$$
+\end{theorem}
+
+\begin{theorem}\emph{(Rao-Blackwell)}
+	Let $V = V(X)$ be a sufficient statistic, and let $T = T(X)$ be an arbitrary real-valued estimator for $g(\theta)$. Then there exists an estimator $T^* = T^*(V)$ for $g(\theta)$ that depends only on $V$, such that $\EE_\theta T^* = \EE_\theta T$ and $\VV_\theta T^* \leq \VV_\theta T$ for all $\theta$. In particular, we have $\text{MSE}(\theta; T^*) \leq \text{MSE}(\theta; T)$. This inequality is strict unless $\PP_\theta(T^* = T) = 1$.
+\end{theorem}
+
+\begin{definition}
+For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$	is called complete if $\EE_\theta(f(V)) = 0,\ \forall \theta\in \Theta$ implies $f(V)=0$ a.s.
+\end{definition}
+
+\begin{theorem}
+	Let $V(x)$ be sufficient and complete, and $T(V)$ be an unbiased estimator for $g(\theta)$. Then $T(V)$ is UMVU estimator (i.e. has smallest variance among all unbiased estimators $\forall\theta\in\Theta$).
+\end{theorem}
+
+\begin{theorem}
+	Suppose that for a $k$-dimensional exponential family (\ref{exponential_family}) the set below contains an interior point:
+\begin{equation*}
+	(Q_1(\theta),\ldots Q_k(\theta)),\ \theta\in\Theta
+\end{equation*}
+Then the random vector $\left(V_1(x),\ldots V_n(x)\right)$ is sufficient and complete.
+\end{theorem}
+
 
 \section{Estimators}
 
