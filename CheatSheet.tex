@@ -12,8 +12,6 @@
 \usepackage{url}
 
 
-
-
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
@@ -237,6 +235,91 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 \end{theorem}
 \proof $\left\|X\right\|^2 - n \bar{X}^2 = (n-1)S_X^2$
 
+\begin{definition}
+	Let $A\in\CC^{m\times n}$ and $A^{\sim}\in \CC^{n\times m}$. Consider a list of conditions:
+	\begin{enumerate}
+		\item $AA^{\sim}A = A$
+		\item $A^{\sim}AA^{\sim} = A^{\sim}$
+		\item $(AA^{\sim})^* = AA^{\sim}$
+		\item $(A^{\sim}A)^* = A^{\sim}A$
+	\end{enumerate}
+	If $A^{\sim}$ satisfies the first condition, then it is a \emph{generalized inverese} of $A$. If it satisfies the first two conditions, then it is a \emph{reflexive generalized inverese} of $A$. If $A$ satisfies all four conditions the it is called the \emph{Moore-Penrose inverse}.
+\end{definition}
+
+\begin{proposition}
+	The space of generalized inverse matrices to a given matrix has dimension $2 \operatorname{rk}A\operatorname{corank}A$. It is characterized by two properties:
+	\begin{itemize}
+		\item The restriction of $A^{\sim}$ on $\operatorname{Im}A$ is an arbitrary lift of the inverse of induced isomorphism on the quotient by $\operatorname{Ker}A$.
+		\item The image of $A^{\sim}$ equals $A^{\sim} \operatorname{Im}A$.
+	\end{itemize}
+\end{proposition}
+
+\begin{theorem}
+	Let $X\sim N(\mu_X, \VV_X)$ be a $k$-dimensional random vector, where $\VV_X$ might be singular. Then for any linear condition of the form $BX = b$ and any linear transformation $AX$, conditional distributions of $X$ and $AX$ are given by the following formulae:
+	\begin{align*}
+		f(X|BX) \sim N(\mu_X + \VV_XB^T(B\VV_XB^T)^{\sim}(BX& - B\mu_X),\\ \VV_X - &\VV_XB^T(B\VV_XB^T)^{\sim}B\VV_X)\\
+		f(AX|BX) \sim N(A\mu_X + A\VV_XB^T(B\VV_XB^T)^{\sim}(BX& - B\mu_X),\\ A\VV_XA^T - &A\VV_XB^T(B\VV_XB^T)^{\sim}B\VV_XA^T)
+	\end{align*}
+	where $A^{\sim}$ denotes reflexive generalized inverse of matrix $A$.
+\end{theorem}
+
+\proof Follows from the proposition below.
+
+\begin{proposition}\label{gausscond2}
+	Let $Y$ be a Gaussian random vecor such that
+	\begin{equation*}
+		Y = \begin{pmatrix}
+			Y_1\\Y_2
+	\end{pmatrix}\sim
+	N\left(
+	\begin{pmatrix}
+		0\\0
+	\end{pmatrix},
+	\begin{pmatrix}
+		V_{11} & V_{12}\\V_{21} & V_{22}
+	\end{pmatrix}
+	\right)
+	\end{equation*}
+	Then $Y_1$ conditional on $Y_2$ is Gaussian:
+	\begin{equation*}
+		f(Y_1|Y_2) \sim N(V_{12}V_{22}^{\sim}Y_2, V_{11} - V_{12}V_{22}^{\sim}V_{21})
+	\end{equation*}
+\end{proposition}
+\begin{example}
+Let
+	\begin{equation*}
+		\begin{pmatrix}
+			x\\y
+	\end{pmatrix}\sim
+	N\left(
+	\begin{pmatrix}
+		0\\0
+	\end{pmatrix},
+	\begin{pmatrix}
+		1 & \rho\\ \rho & 1
+	\end{pmatrix}
+	\right)
+	\end{equation*}
+	Then
+	\begin{equation*}
+			f(y|x) \sim N(\rho x, 1 - \rho^2)
+	\end{equation*}
+\end{example}
+\noindent\emph{Proof of Proposition \ref{gausscond2}.} We only consider the case with $\VV(Y)$ nonsingular. It is generalized in a straightforward way, but does not admit straightforward matrix notation for Gaussian distributions.
+
+By definition,
+\begin{equation}\label{gausscond2eq1}
+	f(Y_1|Y_2=y_2) = \frac{f(Y_1,y_2)}{\int_{Y_2 = y_2}f(Y_1, y_2)dY_1}
+\end{equation}
+It is enough to show that
+\begin{align}\label{gausscond2eq2}
+	Y^T\VV(Y)^{-1}Y = (Y_1 - V_{12}V_{22}^{-1})^T(V_{11}  - V_{12}V_{22}^{-1}V_{21})^{-1}(Y_1 - V_{12}V_{22}^{-1}) + C(Y_2)
+\end{align}
+where $C(Y_2)$ is a term that does not depend on $Y_1$. Note that in (\ref{gausscond2eq1}) the part of the exponential in Gaussian density depending on $C(Y_2)$ cancels out. After the cancellation, we are left with the required density up to a multiplicative constant. The latter has to have correct magnitude so that the whole expression corresponds to a density function; alternatively it can be computed directly.
+
+The equation (\ref{gausscond2eq2}) is a direct consequence of the inversion formula for $2\times 2$ block matrix.
+
+
 
 \subsection{Reminder on different convergence types}
 \begin{definition}
@@ -260,6 +343,37 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 	\end{equation*}
 \end{proposition}
 \proof Established using Monotone and Dominated Convergence theorems applied to partial sums of random variables.
+
+
+\begin{proposition}
+	Let $f(x)$ be a function of period $T$ that is absolutely integrable on the interval $[-T/2, T/2]$. Define its Fourier coefficients as follows:
+\begin{align*}
+	a_k &= \frac 2 T \int_{-T/2}^{T/2} f(x)\cos \frac {2\pi kx}T dx, \ k = 0,1, \ldots \\
+	b_k &= \frac 2 T \int_{-T/2}^{T/2} f(x)\sin \frac {2\pi kx}T dx, \ k = 1,2, \ldots
+\end{align*}
+Then the partial sum $S_n(x) \eq a_0/2 + \sum_{k=1}^n \left( a_k \cos {\frac {2\pi kx}T}+b_k \sin {\frac {2\pi kx}T}\right)$ of the Fourier series admits an integral presentation:
+\begin{equation*}
+	S_n(x) = \frac 2 T \int_{-T/2}^{T/2} f(x+u) \frac {\sin(n+\frac 1 2)\frac{2\pi u}{T}}{\sin\frac {\pi u}{T}}dx
+\end{equation*}
+\end{proposition}
+\emph{Remark:} Note that the coefficient $a_0$ defined by the formulas above is twice the coefficient to of the constant function in Fourier series (as the norm of a sine wave is twice less).
+
+\begin{theorem}
+	Let $f(x)$ be a function of period $T$ that is absolutely integrable on the interval $[-T/2, T/2]$.
+	\begin{enumerate}
+		\item At a point of continuity where $f(x)$ has a right and a left derivative, the Fourier series coverge absolutely to the value $f(x)$
+		\item If $f(x)$ is continuous and its derivative $f'(x)$ is square integrable, then the Fourier series converge to $f(x)$ absolutely and uniformly
+		\item If $f(x)$ is continuous, then the Fourier series are uniformally summable to $f(x)$ by the method of Ces\`{a}ro
+	\end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+	If series $\sum_{k=1}^{\infty}\left(|a_k| + |b_k|\right)$ are absolutely summable then the associated trigonometric series
+\begin{equation*}
+\frac {a_0} 2 + \sum_{k=1}^\infty \left( a_k \cos {\frac {2\pi kx}T}+b_k \sin {\frac {2\pi kx}T}\right)
+\end{equation*}
+	converges absolutely and uniformly to a continuous periodic function of period $T$ of which it is a Fourier series
+\end{theorem}
 
 \begin{proposition}
 	Let $(a_n)_{n\in\ZZ}$ be an element of $l^1(\ZZ)$, and let $(Z_t)_{t\in\ZZ}$ be a sequence of random variables satisfying $\EE |Z_t| < C_1\ \forall t$ for some constant $C_1$. Then the convolution
@@ -313,6 +427,48 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 \end{theorem}
 
 
+
+\subsection{Time Series}
+
+\begin{proposition}\label{diff_sol}
+	Given the difference equation of order $n$:
+	\begin{equation}\label{diff_sol_rec}
+		y_t + a_1y_{t-1} + a_2y_{t-2} + \ldots + a_ny_{t-n} = r_t, \ t = n, n+1, \ldots
+	\end{equation}
+	The solution $\left(y_n\right)_{n = 0}^{\infty}$ can be expressed in the form:
+	\begin{equation*}
+		y_t =  \sum_{i = 0}^t w_ir_{t-i}, \ t = 0, 1, \ldots
+	\end{equation*}
+	with $w_i\equiv0$ for $i<0$, and satisfying the homogeneous differrence equaition of $(y_t)$:
+	\begin{equation}\label{diff_sol_rel}
+		\sum_{i = 0}^n a_iw_{t-i} = 0,\ i = 1, 2,\ldots
+	\end{equation}
+
+\end{proposition}
+\proof
+Using recursive formula (\ref{diff_sol_rec}) for $y_t$, any element of the sequence can be written in the form:
+\begin{equation*}
+	y_t = \sum_{i = 0}^t w_i^{(t)} r_{t-i}
+\end{equation*}
+for some $w_i^{(t)}$ with $t\in\ZZ_{\geq 0},\ 0\leq i\leq t$.
+Using inductive argument, we show that
+\begin{enumerate}
+	\item $w_i^{(t)}\equiv w_i$ for some constant depending on $i$ only
+	\item The sequence $w_i$ satisfies equation (\ref{diff_sol_rel})
+\end{enumerate}
+
+Indeed, from the equation \ref{diff_sol_rec} it is immediate to see that $w_0 = 1$ and $w_1 = -a_1$. Assuming that the pair of statements above is shown for $s < t$, write:
+
+\begin{equation}\label{diff_sol_pr}
+	y_t = r_t - \sum_{k = 0}^{n}a_k^{(t)}y_{t-k}=r_t - \sum_{k = 1}^{t}a_k\sum_{j = 0}^{t - k} w_jr_{t - k - j}
+\end{equation}
+By definition, we set $w_t$ to be the coefficient of $r_0$, that is,  $w_t = - \sum_{i = 1}^n a_iw_{t-i}$. Moreover, by rearranging terms in \ref{diff_sol_pr}, we get:
+\begin{equation*}
+	y_t = -\sum_{j = 0}^t r_j \sum_{k = 1}^{t-j}{a_k w_{t-j-k}},
+\end{equation*}
+it follows that the coefficient $w_{t-j}^{(t)}$ of $r_j, \ j = 1, \ldots t,$ is equal to $w_{t-j}$ by induction assumpiton and it concludes the proof.
+
+
 \begin{theorem}\label{infARinfMA}
 	\begin{enumerate}
 	\item
@@ -363,57 +519,6 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 	\end{align*}
 \end{proposition}
 \noindent\emph{Remark:} this result allows one to express $\gamma(0), \ldots \gamma(p)$ through the coefficients $a_1,\ldots a_p$ and vice versa.
-
-\subsection{Time Series}
-
-\begin{proposition}\label{diff_sol}
-	Given the difference equation of order $n$:
-	\begin{equation}\label{diff_sol_rec}
-		y_t + a_1y_{t-1} + a_2y_{t-2} + \ldots + a_ny_{t-n} = r_t, \ t = n, n+1, \ldots
-	\end{equation}
-	The solution $\left(y_n\right)_{n = 0}^{\infty}$ can be expressed in the form:
-	\begin{equation*}
-		y_t =  \sum_{i = 0}^t w_ir_{t-i}, \ t = 0, 1, \ldots
-	\end{equation*}
-	with $w_i\equiv0$ for $i<0$, and satisfying the homogeneous differrence equaition of $(y_t)$:
-	\begin{equation}\label{diff_sol_rel}
-		\sum_{i = 0}^n a_iw_{t-i} = 0,\ i = 1, 2,\ldots
-	\end{equation}
-
-\end{proposition}
-\proof
-Using recursive formula (\ref{diff_sol_rec}) for $y_t$, any element of the sequence can be written in the form:
-\begin{equation*}
-	y_t = \sum_{i = 0}^t w_i^{(t)} r_{t-i}
-\end{equation*}
-for some $w_i^{(t)}$ with $t\in\ZZ_{\geq 0},\ 0\leq i\leq t$.
-Using inductive argument, we show that
-\begin{enumerate}
-	\item $w_i^{(t)}\equiv w_i$ for some constant depending on $i$ only
-	\item The sequence $w_i$ satisfies equation (\ref{diff_sol_rel})
-\end{enumerate}
-
-Indeed, from the equation \ref{diff_sol_rec} it is immediate to see that $w_0 = 1$ and $w_1 = -a_1$. Assuming that the pair of statements above is shown for $s < t$, write:
-
-\begin{equation}\label{diff_sol_pr}
-	y_t = r_t - \sum_{k = 0}^{n}a_k^{(t)}y_{t-k}=r_t - \sum_{k = 1}^{t}a_k\sum_{j = 0}^{t - k} w_jr_{t - k - j}
-\end{equation}
-By definition, we set $w_t$ to be the coefficient of $r_0$, that is,  $w_t = - \sum_{i = 1}^n a_iw_{t-i}$. Moreover, by rearranging terms in \ref{diff_sol_pr}, we get:
-\begin{equation*}
-	y_t = -\sum_{j = 0}^t r_j \sum_{k = 1}^{t-j}{a_k w_{t-j-k}},
-\end{equation*}
-it follows that the coefficient $w_{t-j}^{(t)}$ of $r_j, \ j = 1, \ldots t,$ is equal to $w_{t-j}$ by induction assumpiton and it concludes the proof.
-
-
-
-\begin{theorem}
-	The real valued function $\rho(h)$ is the correlation function of a real valued stationary time series $X_t(\omega)$ with index set $t\in\ZZ$ if and only if it is representable in the form
-\begin{equation*}
-	\rho(h) = \int_{-\pi}^\pi e^{ihx}dG(x),
-\end{equation*}
-	where $G(x)$ is a symmetric distribution function.
-\end{theorem}
-
 
 \begin{proposition}\label{pac_properties} Let $X_t$ be weakly stationary time series:
 	\begin{enumerate}
@@ -486,6 +591,26 @@ Then one can write $Y_t = \sum_{i=1}^t c_{t,i}Z_i$ where
 \end{theorem}
 \proof This is a result of direct application of Gram-Schmidt orthogonalization algorythm to the sequence $Y_1, \ldots, Y_t$. Note that the process can be generalized to vector-valued processes.
 
+
+\begin{theorem}
+	The real valued function $\rho(h)$ is the correlation function of a real valued stationary time series $X_t(\omega)$ with index set $t\in\ZZ$ if and only if it is representable in the form
+\begin{equation*}
+	\rho(h) = \int_{-\pi}^\pi e^{ihx}dG(x),
+\end{equation*}
+	where $G(x)$ is a symmetric distribution function
+\end{theorem}
+
+\begin{theorem}
+	Let the correlation funciton $\rho(h)$ of a stationary time series be abcolutely summable. Then there exists a continuous function $f(\omega)$ such that.
+	\begin{enumerate}
+		\item $\rho(h) = \int_{-\pi}^{\pi}f(\omega)\cos \omega h d\omega$
+		\item $\int_{-\pi}^{\pi}f(\omega)d\omega = 1$
+		\item $f(\omega)\geq 0$
+		\item $f(\omega)$ is an even function
+	\end{enumerate}
+\end{theorem}
+
+
 \subsection{Estimator convergence via information matrix}
 
 \begin{definition}\label{information_def}
@@ -495,7 +620,7 @@ Let $X$ be a random variable defined on probability space $(\Omega,\PP_\theta),\
 \end{equation*}
 is called the \emph{score function}. The \emph{Fisher information} is defined as the matrix
 \begin{equation*}
-	i_\theta = \VV_\theta\dot{\ell_\theta}(X)
+	i_\theta = \VV_\theta\left(\dot{\ell_\theta}(X)\right)
 \end{equation*}
 \end{definition}
 
@@ -520,7 +645,7 @@ is called the \emph{score function}. The \emph{Fisher information} is defined as
 \subsection{Sufficient Statistics and UMVU estimators}
 
 \begin{definition}
-	For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$ is called \emph{sufficient} (for r.v. $X$) if conditional distribution $f(x|V = v)$ is independent of $V$.
+	For a statistical model $(\Omega, \PP_\theta), \ \theta \in \Theta$, a statistic $V(x)$ is called \emph{sufficient} (for $X$) if conditional distribution $f(x|V = v)$ is independent of $V$.
 \end{definition}
 
 \begin{theorem}\label{factorizarion}
