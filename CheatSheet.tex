@@ -47,6 +47,7 @@
 \newcommand{\VV}{\mathbb{V}}
 \newcommand{\II}{\mathbb{I}}
 \newcommand{\eq}{\stackrel{\mathclap{\normalfont\text{def}}}{=}}
+\newcommand{\convas}{\stackrel{\mathclap{\normalfont\text{as}}}{\longrightarrow}}
 
 
 \begin{document}
@@ -108,7 +109,7 @@ $X_{(k)}$ --- $k-th$ order statistic distribution for $n$ i.i.d. variables from 
 Time series below are assumed to be \emph{weakly stationary} in the following sense:
 
 \begin{itemize}
-	\item Stochastic time series $X_t(\omega)$ are called \emph{weakly stationary}, if $\EE X_t$ and $\textbf{cov}(X_t, X_s)$ are inependent of time shifts; in particular, it first and second moments exist.
+	\item Stochastic time series $X_t(\omega)$ are called \emph{weakly stationary}, if $\EE X_t$ and $\text{Cov}(X_t, X_s)$ are inependent of time shifts; in particular, it first and second moments exist.
 	\item For a weakly stationary time series $X_t$, the following functios are defined:
 	\begin{itemize}
 		\item\emph{Autocovariance funciton}:
@@ -213,7 +214,7 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 \end{itemize}
 
 \begin{definition}\label{exponential_family}
-	A family of probability densities $p_\theta$ that depends on a parameter $\theta$ is called a $k$-dimensional exponential family if there exist functions $c(\theta)$, $h(x)$, $Q_j(\theta)$, and $V_j(x)$ such that
+	A family of probability densities $p_\theta$ that depends on a parameter $\theta$ is called a $k$\emph{-dimensional exponential family} if there exist functions $c(\theta)$, $h(x)$, $Q_j(\theta)$, and $V_j(x)$ such that
 	\begin{equation*}
 		p_\theta(x) = c(\theta)h(x)e^{\sum_{j=1}^k Q_j(\theta)V_j(x)}
 	\end{equation*}
@@ -221,6 +222,130 @@ Time series below are assumed to be \emph{weakly stationary} in the following se
 
 \section{Fundamental results}
 
+\subsection{Convergence types and $o_p$- and $O_p$-notations}
+\begin{definition}\label{convdef}
+Let $X_n,\ n\in\NN$ be a sequence of random vectors.
+	\begin{itemize}
+		\item Sequence $X_n$ is said to \emph{converge in distribution} to a random vector $X$ if at any continuity point $x$ of c.d.f. $F_X$
+		\begin{equation*}
+			X_n \rightsquigarrow X \text{ if } \lim_{n\rightarrow \infty} F_{X_n}(x) = F_X(x)
+		\end{equation*}
+		\item Let $d(x,y)$ be a metric in a target space of $X_n$. Sequence $X_n$ \emph{converges in porobability} to a random vector $X$ if
+		\begin{equation*}
+ X_n \xrightarrow[]{p} X\text{ if } \PP(d(X_n, X) > \varepsilon)\xrightarrow[]{n\rightarrow\infty} 0, \forall \varepsilon >0
+		\end{equation*}
+		\item For the above notations, $X_n$ \emph{converges to $X$ almost surely} if
+		\begin{equation*}
+			 X_n\xrightarrow[]{as} X \text{ if } \PP\left(\lim_{n\rightarrow\infty}X_n = X\right) = 1
+		\end{equation*}
+	\end{itemize}
+\end{definition}
+
+\begin{theorem}
+	Let $X_n, n\in\NN$ and $X$ be random vectors. Then
+	\begin{enumerate}
+		\item $X_n\xrightarrow[]{as} X$ implies $X_n \xrightarrow[]{p} X$
+		\item $X_n\xrightarrow[]{p} X$ implies $X_n\rightsquigarrow X$
+		\item $X_n\rightsquigarrow c$ for a constant $c$, if and only if $X_n\xrightarrow[]{p} X$
+		\item If $X_n\rightsquigarrow X$ and $d(X_n, Y_n)\xrightarrow[]{p} 0$ then $Y_n\rightsquigarrow X$
+		\item If $X_n\rightsquigarrow X$ and $Y_n\rightsquigarrow c$ for a constant $c$, then $(X_n, Y_n) \rightsquigarrow (X, c)$
+		\item If $X_n\xrightarrow[]{p} X$ and $Y_n\xrightarrow[]{p} Y$ for a constant $c$, then $(X_n, Y_n) \xrightarrow[]{p} (X, Y)$
+	\end{enumerate}
+\end{theorem}
+
+\begin{theorem}\label{cont_map_thm}\emph{(Strong law of large numbers)} Let $g:\RR^k\rightarrow\RR^m$ be continuous at every point of a set $c$ such that $\PP(X\in C) = 1$.
+	\begin{enumerate}
+		\item If $X_n\rightsquigarrow X$, then $g(X_n)\rightsquigarrow g(X)$
+		\item If $X_n\xrightarrow[]{p} X$, then $g(X_n)\xrightarrow[]{p} g(X)$
+		\item If $X_n\xrightarrow[]{as} X$, then $g(X_n)\xrightarrow[]{as} g(X)$
+	\end{enumerate}
+\end{theorem}
+
+\begin{definition}
+A family of random vectors $X_\al$ is called \emph{uniformally tight}~if
+\begin{equation*}
+	\lim_{M\rightarrow \infty} \sup_\alpha \Vert X_\alpha \Vert = 0
+\end{equation*}
+\end{definition}
+
+\begin{theorem}\label{levys_thm}\emph{(Levy's continuity theorem)} Let $X_n$ and $X$ be random vectors with values in $\RR^k$, and let $\varphi_{X_n}(t)$ and $\varphi_{X}(t)$ be their characteristic functions respectively.
+\begin{itemize}
+\item If $\varphi_{X_n}(t)$ converges to $\varphi_{X}(t)$ pointwise then $X_n\rightsquigarrow X$
+\item if $\varphi_{X_n}$ converges pointwise to a function continuous at $0$ then $X_n$ converges in distrubution to some random variable $X$ with that characteristic function
+\end{itemize}
+\end{theorem}
+
+\begin{definition}
+	Let $X_n$ and $R_n$ be sequences of random vectors. The following notations are used:
+	\begin{itemize}
+		\item $X_n = o_p(1)$ if $X_n\xrightarrow[]{p}0$
+		\item $X_n = o_p(R_n)$ if $X_n = Y_nR_n$ and $Y_n = o_p(1)$ for some $Y_n$
+		\item $X_n = O_p(1)$ if $X_n$ is uniformally tight
+		\item $X_n = O_p(R_n)$ if $X_n = Y_nR_n$ and $Y_n = O_p(1)$ for some $Y_n$
+	\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $R:\RR^k\rightarrow\RR^m$ be a function with $R(0) = 0$. Let $X_n\xrightarrow[]{p} 0$. Then for every $\alpha > 0$
+\begin{enumerate}
+	\item If $R(h) = o(\Vert h\Vert^\alpha)$ as $h\rightarrow 0$ then $R(X_n) = o_p(\Vert X_n \Vert^\alpha)$
+	\item If $R(h) = O(\Vert h\Vert^\alpha)$ as $h\rightarrow 0$ then $R(X_n) = O_p(\Vert X_n \Vert^\alpha)$
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}\label{delta_method}\emph{(Delta method)}
+	Let $\varphi: \RR^k \rightarrow \RR^m$ be a map defined on a subset of $\RR^k$ and differentiable at $\theta$. Let $T_n$ be random vectors taking values in the domain of $\varphi$. If $r_n(T_n - \theta) \rightsquigarrow T$ for some numbers $r_n \xrightarrow[]{n\rightarrow\infty}\infty$, then \begin{equation*}
+	r_n\left(\varphi(X_n) - \varphi(\theta)\right) \rightsquigarrow \frac{\partial}{\partial\theta}\varphi(\theta)(T)
+	\end{equation*}
+	where right hand side is the linear transformation of $T$ given by the differential of $\varphi$ at $\theta$.
+\end{theorem}
+
+\begin{example}
+	Let $S_n$ be a sample variance of a sequence of i.i.d. random variables $X_n,\ n\in\NN$ with $\EE X_n = 0$ and finite fourth moment. Denote by $\kappa = \frac{\mu_4}{\mu_2^2} - 3$ kurtosis of $X_n$. Then
+	\begin{equation*}
+		\PP\left(\frac{nS^2}{\mu_2} > \chi^2_{n, \alpha}\right) = \PP\left(\sqrt n \left(\frac{S^2}{\mu_2}\right) > \frac{\chi^2_{n, \alpha} - n}{\sqrt n}\right) \rightarrow 1 - \Phi\left(\frac{z_\al\sqrt 2}{\sqrt{\kappa+2}}\right)
+	\end{equation*}
+\end{example}
+\proof By central limit theorem \ref{clt}
+\begin{equation*}
+	\sqrt n \left(\begin{pmatrix}
+		\bar{X_n}\\ \bar{X^2_n}
+\end{pmatrix} - \begin{pmatrix}
+	\al_1\\ \al_2
+\end{pmatrix}\right) \rightsquigarrow N\left(\begin{pmatrix}
+	0\\0
+\end{pmatrix}, \begin{pmatrix}
+	\al_2 - \al_1^2 & \al_3 - \al_1\al_2 \\
+	\al_3 - \al_1\al_2 & \al_4 - \al_2^2
+\end{pmatrix}\right)
+\end{equation*}
+
+\noindent As $S^2$ does not change if $X_n$ is replaced by its centered version, it can be assumed  that $\al_1 = 0$. Delta method for \ref{delta_method} for $\varphi(x, y) = y - x^2$ implies:
+
+\begin{equation*}
+	\sqrt{n}\left(S^2 - \mu_2 \right)\rightsquigarrow N(0, \mu_4 - \mu_2^2)
+\end{equation*}
+
+\subsection{Law of large numbers and central limit theorems}
+
+\begin{theorem}\label{lln}\emph{(Strong law of large numbers)} Let $\bar{X_n}$ be the average of the first $n$ of a sequence of independent identically distributed random vectors $X_k,\ k\in\NN$. If $\EE \Vert X_k\Vert<\infty$ then $\bar{X_n}\convas\EE X_1$.
+\end{theorem}
+
+\begin{theorem}\label{clt}\emph{(Central Limit Theorem)} Let $\bar{X_n}$ be the average of the first $n$ of a sequence of i.i.d. random vectors $X_k,\ k\in\NN$. If $\EE \Vert X_k\Vert^2<\infty$ then
+	\begin{equation}\label{clt_eq}
+		\sqrt{n}(\bar{X_n} - \EE X_1) \rightsquigarrow N\left(0, \VV (X_1)\right)
+	\end{equation}
+\end{theorem}
+
+\begin{theorem}\label{lf_clt}\emph{(Lindeberg-Feller theorem)}. For each $n$ let $X_{n,1},\ldots X_{n, k_n}$ be independent random vectors with $\EE \Vert X_{n,i}\Vert^2<\infty$ and such that:
+
+	\begin{align*}
+		\sum_{i=1}^{k_n}\EE\left(\Vert X_{n,i}\Vert^2\II\left(\Vert X_{n,i}\Vert>\varepsilon \right)\right) &\xrightarrow[]{n\rightarrow\infty} 0, \ \forall \varepsilon > 0\\
+		\sum_{i=1}^{k_n} \VV(X_{n,i}) &\xrightarrow[]{n\rightarrow\infty} \Sigma
+	\end{align*}
+
+\noindent Then the sequence $\sum_{i = 1}^{k_n}\left(X_{n,i} - \EE X_{n,i} \right)$ converges in distributiton to $N(0, \Sigma)$.
+\end{theorem}
 
 \subsection{Basic statistics}
 
