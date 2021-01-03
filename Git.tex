@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 
-
 \usepackage{amssymb,amsmath,amsthm}
+\usepackage{listings}
 
 \usepackage{wrapfig,tikz, tikz-cd}
 \usetikzlibrary{arrows, arrows, calc, decorations.markings, automata,calc}
@@ -34,6 +34,63 @@
 
 \definecolor{tangoBlack1}{RGB}{0,0,0}
 \definecolor{tangoGrey1}{RGB}{210,210,210}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+
+%https://tex.stackexchange.com/questions/83882/how-to-highlight-python-syntax-in-latex-listings-lstinputlistings-command
+% Python style for highlighting
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+%bash
+\newcommand\bashstyle{\lstset{
+language=bash,
+basicstyle=\small\ttfamily,
+commentstyle=\color{red},
+keywordstyle=\color{deepblue},
+showstringspaces=false
+}}
+
+% Bash environment
+\lstnewenvironment{bash}[1][]
+{
+\bashstyle
+\lstset{#1}
+}
+{}
+
+% bash for inline
+\newcommand\bashinline[1]{{\bashstyle\lstinline!#1!}}
+
+
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttm,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            %
+}}
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
 
 \makeatletter
 \newtcbox{\keywordmin}{
@@ -49,11 +106,8 @@
 }
 \makeatother
 
+
 \begin{document}
-
-
-
-
 
 \title{Git cheat sheet}
 \author{Efim Abrikosov}
@@ -202,7 +256,41 @@ Check that pip is installed
 Install `virtualenv' package. WARNING: for now do not simply use \keywordmin{pip3 install [package name]}, rather rely on \keywordmin{python -m pip install [package name] --user}. This ensures that package management is controlled by pip and not by OS distribution system ()\href{https://github.com/pypa/pip/issues/5599}{some details}).
 \keywordmin{wh}
 
+\subsection{Using Google Cloud AI Platform to train models}
+Use your local environment to develop a model. Organize it in the form of a python package with \emph{task\_script.py} script that can be launched locally using the following minimal example
 
+\begin{bash}
+python -m task_package.task_script /
+  --job-dir <path to job dir> [optional arguments]
+\end{bash}
+
+Typically the task script will contain instructions to parse command line arguments, define a model and data pipeline, train the model record checkpoints and finally store model weights,
+
+When the package is ready it can be seamlessly transferred to run on Google Cloud AI Platform with the following minimal example:
+
+\begin{bash}
+gcloud ai-platform jobs submit training $JOB_NAME /
+  --package-path $PATH_TO_PACKAGE /
+  --module-name task_script /
+  --region $REGION /
+  --job-dir $JOB_DIR /
+  --stream-logs /
+  -- [optional arguments accepted by python task script]
+\end{bash}
+Supplied arguments are as follows:
+\begin{itemize}\setlength\itemsep{-5pt}
+  \item[\tiny$\bullet$] \bashinline{\$JOB_NAME} unique name assigned to a job. List of jobs can be viewd with \bashinline{gcloud ai-platform jobs list}
+  \item[\tiny$\bullet$] \bashinline{--package-path} local path to the package (e.g. \bashinline{task\_package/})
+  \item[\tiny$\bullet$] \bashinline{--module-name} name of task script in the package (e.g. \bashinline{task\_script})
+  \item[\tiny$\bullet$] \bashinline{--region} name of gcloud compute region (e.g. \bashinline{us-east1}). List of regions can be viewd with \bashinline{gcloud compute regions list}
+  \item[\tiny$\bullet$] \bashinline{\$JOB_DIR} valid path accessible by AI Platform. For instance, can use a directory in a Google Cloud Storage Bucket (list project buckets with \bashinline{gsutil ls})
+  \item[\tiny$\bullet$] \bashinline{--stream-logs} view script  stdout in command line during the execution
+\end{itemize}
+Further control over execution can be fine-tuned with the following useful AI Platform options:
+\begin{itemize}\setlength\itemsep{-5pt}
+  \item[\tiny$\bullet$] \bashinline{python-version 3.7}
+  \item[\tiny$\bullet$] \bashinline{--runtime-version 2.1} use TensorFlow version 2.1 for execution (\href{https://cloud.google.com/ai-platform/training/docs/runtime-version-list}{list} of available runtime versions and packages within})
+\end{itemize}
 
 
 
