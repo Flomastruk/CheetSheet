@@ -946,6 +946,229 @@ where $\hat F_n(x)$ stands for the empirical distribution function (see \ref{ecd
 
 
 
+\section{Examples}
+\subsection{Structural Models}
+\subsubsection{Local level plus noise}
+\begin{itemize}
+	\item Model
+
+	$\begin{cases}
+		y_t = \mu_t+\varepsilon_t\\
+		m_t = \mu_{t-1}+\eta_t
+	\end{cases}$
+
+	\item Stationary form
+
+	$\Delta y_t = \eta_t + \Delta \varepsilon_t$
+
+	\item Reduced expression
+
+	$\displaystyle y_t = \frac {\eta_t} \Delta + \varepsilon_t$
+
+	\item Autocovariance generating function
+
+	$g_{\Delta y_t}(L) = \sigma^2_{\eta} + (1+L)(1+L^{-1})\sigma^2_{\varepsilon}$
+
+	\item Power spectrum
+
+	$g_{\Delta y_t}(\lambda) = \sigma^2_{\eta} + 2(1-\cos \lambda)\sigma^2_{\varepsilon}$
+
+\end{itemize}
+\subsubsection{Local linear trend}
+\begin{itemize}
+	\item Model
+
+	$\begin{cases}
+		y_t = \mu_t+\varepsilon_t\\
+		\mu_t =  \mu_{t-1}+\beta_{t-1}+\eta_t\\
+		\beta_t = \beta_{t-1}+\zeta_t
+	\end{cases}$
+
+	\item Stationary form
+
+	$\Delta^2 y_t = \zeta_{t-1} + \Delta\eta_t + \Delta^2\varepsilon_t$
+
+	\item Reduced expression
+
+	$\displaystyle y_t = \frac {\zeta_{t-1}} {\Delta^2} + \frac {\eta_t} \Delta + \varepsilon_t$
+
+	\item Autocovariance generating function
+
+	$g_{\Delta^2 y_t}(L) = \sigma^2_{\zeta}+(1+L)(1+L^{-1})\sigma^2_{\eta} + (1+L)^2(1+L^{-1})^2\sigma^2_{\varepsilon}$
+
+	\item Power spectrum
+
+	$g_{\Delta y_t}(\lambda) = \sigma^2_{\zeta} + 2(1-\cos \lambda)\sigma^2_{\eta}+4(1-\cos\lambda)^2\sigma^2_\varepsilon$
+
+\end{itemize}
+\subsubsection{Cyclical models}
+\begin{itemize}
+	\item Model ($0\leq\rho\leq 1$)
+
+	$\begin{pmatrix}
+		\psi_{t}\\ \psi^*_{t}
+	\end{pmatrix}=\rho
+	\begin{pmatrix}
+		\cos \lambda_c & \sin \lambda_c \\ -\sin \lambda_c & \cos \lambda_c
+	\end{pmatrix}\begin{pmatrix}
+		\psi_{t-1}\\ \psi^*_{t-1}
+	\end{pmatrix}+\begin{pmatrix}
+		\kappa_{t}\\ \kappa^*_{t}
+	\end{pmatrix}$
+
+		\begin{itemize}
+			\item Stochastic cycle
+
+			$y_t = \mu+\psi_t +\varepsilon_t$
+
+			\item Trend plus cycle
+
+			$y_t = \mu_t + \psi_t +\varepsilon_t$
+
+			\item Cyclical trend
+
+			$\begin{cases}
+				y_t = \mu_t+\varepsilon_t\\
+				\mu_t =  \mu_{t-1}+\psi_{t-1}+\beta_{t-1}+\eta_t\\
+				\beta_t = \beta_{t-1}+\zeta_t
+			\end{cases}$
+
+		\end{itemize}
+	\item Stationary form
+
+	\begin{itemize}
+		\item Stochastic cycle ($y_t$ stationary iff $\rho<1$)
+
+		$\displaystyle y_t = \frac{(1-L\rho\cos\lambda_c)\kappa_t + (L\rho\sin\lambda_c)\kappa_t^*}{1-2L\rho\cos\lambda_c+\rho^2L^2}+\varepsilon_t$
+
+		\item Trend plus cycle
+
+		$\Delta^2 y_t = \zeta_{t-1} + \Delta\eta_t + \Delta^2 \psi_t + \Delta^2\varepsilon_t$
+
+		\item Cyclical trend
+
+		$\Delta^2 y_t = \zeta_{t-1} + \Delta\eta_t + \Delta \psi_{t-1} + \Delta^2\varepsilon_t$
+
+	\end{itemize}
+
+	\item Reduced form (skipped --- obvious from Stationary form)
+
+	\item Autocovariance generating function (view as VAR(1) process to derive)
+
+	\begin{itemize}
+		\item Stochastic cycle
+
+		$\displaystyle g_{y_t}(L) = \frac {\sigma^2_\kappa} {1-\rho^2} \sum_{\tau = -\infty}^{\tau = \infty} L^\tau \rho^{|\tau|}\cos\lambda_c\tau$
+
+		\item Trend plus cycle \& Stochastic trend --- use stationary form and take a sum of autocovariance generating functions of components accounting for differencing operators
+
+	\end{itemize}
+
+	\item Power spectrum ($\rho<1$). Easiest to see from the stationary form by substitution $L = e^{i\lambda}$. Note the difference between cycle frequency $\lambda_c$ and the spectral parameter $\lambda$:
+
+	$\displaystyle g_\psi(e^{i\lambda}) = \frac {|1-\rho\cos\lambda_c e^{i\lambda}|^2 + |\rho\sin\lambda_c e^{i\lambda}|^2}{|1-2\rho\cos\lambda_c e^{i\lambda}+ \rho^2e^{2i\lambda}|}$
+
+\end{itemize}
+\subsubsection{Basic structural model (BSM)}
+
+\begin{itemize}
+	\item Model
+
+	$y_t =\mu_t + \gamma_t + \varepsilon_t$
+
+	\begin{itemize}
+		\item Dummy variable seasonal component
+
+		$\displaystyle \sum_{\tau = 0}^{s-1} \gamma_{t-\tau} = \omega_t$
+
+		\item Trigonometric seasonal component (c.f. Stochastic cycle):
+
+		$\displaystyle \gamma_t = \sum_{j=1}^{\lfloor s/2 \rfloor} \gamma_{jt},\ \gamma_{jt} = \frac{(1-L\cos\lambda_j)\omega_t + (L\sin\lambda_j)\omega_t^*}{1-2L\cos\lambda_j+L^2}, \lambda_j = \frac {2\pi j}s$
+
+	\end{itemize}
+
+	Note that cycles don't have dampening $\rho$ factor, which makes the not stationary.
+
+	\item Stationary form
+
+	To make seasonal component $\gamma_t$ in both versions of BSM model stationary, seasonal averaging $S(L) = 1+L+\ldots + L^{s-1}$ must be applied (excercise), it won't be stationary as is due to absence of dampening factor.
+
+	\begin{itemize}
+		\item Dummy variable seasonal component ($S(L)\gamma_t = \omega_t$)
+
+		$\Delta \Delta_s y_t = S(L)\zeta_{t-1} + \Delta S(L)\eta_t + \Delta^2\omega_t+\Delta \Delta_s\varepsilon_t$
+
+
+		\item Trigonometric seasonal component (below $\bar{\gamma_j} = S(L)/(1-2L\cos \lambda_j + L^2)$; or $(1+L)$ denominator for $j=s/2$ with even $s$):
+
+		$\displaystyle S(L)\gamma_t = \sum_{j=1}^{\lfloor s/2 \rfloor} \bar{\gamma_j}\left( (1-L\cos\lambda_j)\omega_{jt} + (L\sin\lambda_j)\omega_{jt}^*\right)$
+
+	\end{itemize}
+
+	\item Reduced form
+
+	\begin{itemize}
+		\item Dummy variable seasonal component
+
+		$\displaystyle y_t = \frac {\zeta_{t-1}} {\Delta^2} + \frac {\eta_t} \Delta + \frac {\omega_t} {S(L)} + \varepsilon_t$
+
+		\item Trigonometric seasonal component follow directy from the form of $\gamma_{jt}$. Also note that trigonometric components can be written in VAR(1) form.
+
+	\end{itemize}
+
+	\item Autocovariance generating function
+
+	\begin{itemize}
+		\item Dummy variable seasonal component
+
+		The formula for $g_{\Delta\Delta_s y_t}$ follows from the stationary form. In particular, it follows that $\gamma(\tau) = 0$ for $\tau > s+1$
+
+		\item Trigonometric seasonal component is more involved, can be derived directly by averaging and expressing $S(L)\gamma_t$ as a sum of $\omega_{jt}, \omega_{jt}^*$. For example, $s=4$:
+
+		$S(L)\gamma_t = (1+L)(\omega_{1t}+\omega{1t-1}^*)+ (1+L^2)\omega_{2t}$
+
+		$\Delta\Delta_4 y_t= S(L)\zeta_{t-1}+\Delta_4\eta_t +\Delta^2(1+L)(\omega_{1t}+\omega_{1t-1}^*) + \Delta^2(1+L^2)\omega_{2t}+\Delta\Delta_4\varepsilon_t$
+
+
+	\end{itemize}
+
+	\item Power spectrum
+
+	\begin{itemize}
+		\item Dummy variable seasonal component (follows from the stationary form by substitution $L = e^{i\lambda}$)
+
+		\begin{align*}
+			g_{\Delta\Delta_s y_t}(L) = S(L)S(L^{-1})\sigma^2_\zeta+ & (1-L^s)(1-L^{-s})\sigma^2_\eta+\\+(1-L)^2(1-L^{-1})^2\sigma^2_\omega & + (1-L)(1-L^{-1})(1-L^s)(1-L^{-s})\sigma^2_\varepsilon
+		\end{align*}
+
+		\item Trigonometric seasonal component follow from the stationary form, doesn't seem to simplify significantly.
+
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{ARMA models}
+
+\begin{itemize}
+	\item Model (all complex roots of $\varphi(L)$ are required to have absolute value strictly greater than one)
+
+	$\varphi(L) y_t = \theta(L) \varepsilon_t$
+
+	\item Stationary form --- $y_t$ is stationary without any transformations
+
+	\item Reduced form
+
+	$y_t = \frac {\theta(L)}{\varphi(L)} \varepsilon_t$
+
+	\item Autocovariance generation function
+
+	$g_{y_t}(L) = \frac {\theta(L)\theta(L^{-1})}{\varphi(L)\varphi(L^{-1})}$
+
+	\item Power spectrum
+
+	$f(\lambda) = \frac{|\theta(e^{i\lambda})|^2}{|\varphi(e^{i\lambda})|^2}$
+
+
+\end{itemize}
 
 
 \end{document}
