@@ -3,7 +3,7 @@
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{listings}
 
-\usepackage{wrapfig,tikz, tikz-cd}
+\usepackage{wrapfig,tikz,tikz-cd}
 \usetikzlibrary{arrows, arrows, calc, decorations.markings, automata,calc}
 
 \newcommand{\dd}{\partial}
@@ -201,7 +201,7 @@ showstringspaces=false            %
 \item Click ``Library'' and search for required API (e.g. Cloud Vision API, Translate API, Speech API, or Natural Language API)
 \item Click ``Enable'' if necessary
 \item In APIs\&Services click ``Credentials'' and create ``API key'' if necessary. This key will be used in Datalab code to invoke various APIs
-%Invoking ML APIs from Datalab
+% Invoking ML APIs from Datalab
 \item In Datalab use APIKEY generated in credentials as ``developerKey'' parameter in Datalab code
 \item In Datalab, run
 ``!pip install --upgrade google-api-python-client''
@@ -253,7 +253,7 @@ Install `pip' package management system with distribution:
 Check that pip is installed
 \keywordmin{python3 -m pip -{}-version}
 
-Install `virtualenv' package. WARNING: for now do not simply use \keywordmin{pip3 install [package name]}, rather rely on \keywordmin{python -m pip install [package name] --user}. This ensures that package management is controlled by pip and not by OS distribution system ()\href{https://github.com/pypa/pip/issues/5599}{some details}).
+Install `virtualenv' package. WARNING: for now do not simply use \keywordmin{pip3 install [package name]}, rather rely on \keywordmin{python -m pip install [package name] --user}. This ensures that package management is controlled by pip and not by OS distribution system (\href{https://github.com/pypa/pip/issues/5599}{some details}).
 \keywordmin{wh}
 
 \subsection{Using Google Cloud AI Platform to train models}
@@ -289,9 +289,8 @@ Supplied arguments are as follows:
 Further control over execution can be fine-tuned with the following useful AI Platform options:
 \begin{itemize}\setlength\itemsep{-5pt}
   \item[\tiny$\bullet$] \bashinline{python-version 3.7}
-  \item[\tiny$\bullet$] \bashinline{--runtime-version 2.1} use TensorFlow version 2.1 for execution (\href{https://cloud.google.com/ai-platform/training/docs/runtime-version-list}{list} of available runtime versions and packages within})
+  \item[\tiny$\bullet$] \bashinline{--runtime-version 2.1} use TensorFlow version 2.1 for execution (\href{https://cloud.google.com/ai-platform/training/docs/runtime-version-list}{list} of available runtime versions and packages within)
 \end{itemize}
-
 
 
 \section{Useful links}
